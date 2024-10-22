@@ -15,7 +15,7 @@ DEV_OP = [
         InlineKeyboardButton(text="˹ ʜᴇʟᴘ & ᴄᴍᴅs ˼", callback_data="HELP"),
     [
         InlineKeyboardButton(text="˹ ᴍᴜsɪᴄ ˼", url=f"https://t.me/{MUSIC}"),
-        InlineKeyboardButton(text="˹ ʀᴇᴘᴏ ˼", url=f"https://t.me/{REPO}"),
+        InlineKeyboardButton(text="˹ ʀᴇᴘᴏ ˼", url=f"https://github.com/BABY-MUSIC/{REPO}"),
     ],
 ]
 
