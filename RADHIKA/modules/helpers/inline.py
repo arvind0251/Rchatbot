@@ -1,21 +1,19 @@
 from pyrogram.types import InlineKeyboardButton
-from config import SUPPORT_GRP, UPDATE_CHNL, MUSIC, REPO
-from RADHIKA import BOT_USERNAME, OWNER
 
 DEV_OP = [
     [
         InlineKeyboardButton(
             text="˹ ᴀᴅᴅ ᴍᴇ ʙᴀʙʏ ˼",
-            url=f"https://t.me/{BOT_USERNAME}?startgroup=true",
+            url=f"https://t.me/BABY_MUSIC09_BOT?startgroup=true",  # MUSIC link inserted
         ),
     ],
     [
-        InlineKeyboardButton(text="˹ ᴏᴡɴᴇʀ ˼", user_id=OWNER),
+        InlineKeyboardButton(text="˹ ᴏᴡɴᴇʀ ˼", user_id=7403621976),  # OWNER_ID directly
         InlineKeyboardButton(text="˹ ʜᴇʟᴘ & ᴄᴍᴅs ˼", callback_data="HELP"),
     ],
     [
-        InlineKeyboardButton(text="˹ ᴍᴜsɪᴄ ˼", url=f"https://t.me/{MUSIC}"),
-        InlineKeyboardButton(text="˹ ʀᴇᴘᴏ ˼", url=f"https://github.com/BABY-MUSIC/{REPO}"),
+        InlineKeyboardButton(text="˹ ᴍᴜsɪᴄ ˼", url="https://t.me/BABY_MUSIC09_BOT"),  # MUSIC link
+        InlineKeyboardButton(text="˹ ʀᴇᴘᴏ ˼", url="https://github.com/BABY-MUSIC/RADHIKA"),  # REPO link
     ],
 ]
 
@@ -23,7 +21,7 @@ PNG_BTN = [
     [
         InlineKeyboardButton(
             text="˹ ᴀᴅᴅ ᴍᴇ ʙᴀʙʏ ˼",
-            url=f"https://t.me/{BOT_USERNAME}?startgroup=true",
+            url=f"https://t.me/BABY_MUSIC09_BOT?startgroup=true",  # MUSIC link
         ),
     ],
     [
@@ -94,7 +92,7 @@ HELP_START = [
 HELP_BUTN = [
     [
         InlineKeyboardButton(
-            text="˹ ʜᴇʟᴘ ˼", url=f"https://t.me/{BOT_USERNAME}?start=help"
+            text="˹ ʜᴇʟᴘ ˼", url=f"https://t.me/BABY_MUSIC09_BOT?start=help"  # BOT_USERNAME link
         ),
         InlineKeyboardButton(text="˹ ᴄʟᴏsᴇ ˼", callback_data="CLOSE"),
     ],
@@ -102,15 +100,15 @@ HELP_BUTN = [
 
 ABOUT_BTN = [
     [
-        InlineKeyboardButton(text="˹ sᴜᴘᴘᴏʀᴛ ˼", url=f"https://t.me/{SUPPORT_GRP}"),
+        InlineKeyboardButton(text="˹ sᴜᴘᴘᴏʀᴛ ˼", url="https://t.me/OL6jdTL7JAJjYzVl"),  # SUPPORT_GRP link
         InlineKeyboardButton(text="˹ ʜᴇʟᴘ ˼", callback_data="HELP"),
     ],
     [
-        InlineKeyboardButton(text="˹ ᴏᴡɴᴇʀ ˼", user_id=OWNER),
+        InlineKeyboardButton(text="˹ ᴏᴡɴᴇʀ ˼", user_id=7403621976),  # OWNER_ID directly
         InlineKeyboardButton(text="˹ sᴏᴜʀᴄᴇ ˼", callback_data="SOURCE"),
     ],
     [
-        InlineKeyboardButton(text="˹ ᴜᴘᴅᴀᴛᴇs ˼", url=f"https://t.me/{UPDATE_CHNL}"),
+        InlineKeyboardButton(text="˹ ᴜᴘᴅᴀᴛᴇs ˼", url="https://t.me/BABY09_WORLD"),  # UPDATE_CHNL link
         InlineKeyboardButton(text="◁", callback_data="BACK"),
     ],
 ]
