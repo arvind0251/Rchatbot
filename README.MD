@@ -29,7 +29,7 @@
 
 <h2 align="center"> ──「 sᴜᴘᴘᴏʀᴛ 」──</h2>
 <p align="center"><a href="https://t.me/+OL6jdTL7JAJjYzVl"> <img src="https://img.shields.io/badge/Join-SUPPORT%20GROUP-black?style=for-the-badge&logo=Telegram" width="220" height="38.5"/></a></p>
-<p align="center"><a href="https://t.me/UTTAM470"> <img src="https://img.shields.io/badge/Join-SUPPORT%20CHANNEL-black?style=for-the-badge&logo=Telegram" width="220" height="38.5"/></a></p>
+<p align="center"><a href="https://t.me/BABY09_WORLD"> <img src="https://img.shields.io/badge/Join-SUPPORT%20CHANNEL-black?style=for-the-badge&logo=Telegram" width="220" height="38.5"/></a></p>
 
 <h3 align="center">──「 ʀᴇᴘᴏ sᴛᴀᴛs 」──</h3>
 <a href="https://github.com/BABY-MUSIC/RADHIKA"><img src="https://github-readme-stats.vercel.app/api/pin/?username=BABY-MUSIC&repo=RADHIKA&theme=chartreuse-blue"></a>
