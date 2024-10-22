@@ -1,5 +1,4 @@
 from pyrogram.types import InlineKeyboardButton
-
 from config import SUPPORT_GRP, UPDATE_CHNL, MUSIC, REPO
 from RADHIKA import BOT_USERNAME, OWNER
 
@@ -13,6 +12,7 @@ DEV_OP = [
     [
         InlineKeyboardButton(text="˹ ᴏᴡɴᴇʀ ˼", user_id=OWNER),
         InlineKeyboardButton(text="˹ ʜᴇʟᴘ & ᴄᴍᴅs ˼", callback_data="HELP"),
+    ],
     [
         InlineKeyboardButton(text="˹ ᴍᴜsɪᴄ ˼", url=f"https://t.me/{MUSIC}"),
         InlineKeyboardButton(text="˹ ʀᴇᴘᴏ ˼", url=f"https://github.com/BABY-MUSIC/{REPO}"),
@@ -34,13 +34,11 @@ PNG_BTN = [
     ],
 ]
 
-
 BACK = [
     [
         InlineKeyboardButton(text="◁", callback_data="BACK"),
     ],
 ]
-
 
 HELP_BTN = [
     [
@@ -53,25 +51,22 @@ HELP_BTN = [
     ],
 ]
 
-
 CLOSE_BTN = [
     [
         InlineKeyboardButton(text="˹ ᴄʟᴏsᴇ ˼", callback_data="CLOSE"),
     ],
 ]
 
-
 CHATBOT_ON = [
     [
-        InlineKeyboardButton(text="˹ ᴇɴᴀʙʟᴇ ˼", callback_data=f"addchat"),
-        InlineKeyboardButton(text="˹ ᴅɪsᴀʙʟᴇ ˼", callback_data=f"rmchat"),
+        InlineKeyboardButton(text="˹ ᴇɴᴀʙʟᴇ ˼", callback_data="addchat"),
+        InlineKeyboardButton(text="˹ ᴅɪsᴀʙʟᴇ ˼", callback_data="rmchat"),
     ],
 ]
 
-
 MUSIC_BACK_BTN = [
     [
-        InlineKeyboardButton(text="sᴏᴏɴ..", callback_data=f"soom"),
+        InlineKeyboardButton(text="sᴏᴏɴ..", callback_data="soom"),
     ],
 ]
 
@@ -82,7 +77,6 @@ S_BACK = [
     ],
 ]
 
-
 CHATBOT_BACK = [
     [
         InlineKeyboardButton(text="◁", callback_data="CHATBOT_BACK"),
@@ -90,14 +84,12 @@ CHATBOT_BACK = [
     ],
 ]
 
-
 HELP_START = [
     [
         InlineKeyboardButton(text="˹ ʜᴇʟᴘ ˼", callback_data="HELP"),
         InlineKeyboardButton(text="˹ ᴄʟᴏsᴇ ˼", callback_data="CLOSE"),
     ],
 ]
-
 
 HELP_BUTN = [
     [
@@ -107,7 +99,6 @@ HELP_BUTN = [
         InlineKeyboardButton(text="˹ ᴄʟᴏsᴇ ˼", callback_data="CLOSE"),
     ],
 ]
-
 
 ABOUT_BTN = [
     [
