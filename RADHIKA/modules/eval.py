@@ -79,7 +79,7 @@ async def executor(client: dev, message: Message):
             [
                 [
                     InlineKeyboardButton(
-                        text="⏳",
+                        text="ᴛɪᴍᴇ",
                         callback_data=f"runtime {t2-t1} Seconds",
                     )
                 ]
@@ -99,11 +99,11 @@ async def executor(client: dev, message: Message):
             [
                 [
                     InlineKeyboardButton(
-                        text="⏳",
+                        text="ᴛɪᴍᴇ",
                         callback_data=f"runtime {round(t2-t1, 3)} Seconds",
                     ),
                     InlineKeyboardButton(
-                        text="🗑",
+                        text="ᴄʟᴏsᴇ",
                         callback_data=f"forceclose abc|{message.from_user.id}",
                     ),
                 ]
