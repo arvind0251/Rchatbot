@@ -8,7 +8,7 @@ DEV_OP = [
         ),
     ],
     [
-        InlineKeyboardButton(text="˹ ᴏᴡɴᴇʀ ˼", user_id=7403621976),  # OWNER_ID directly
+        InlineKeyboardButton(text="˹ ᴏᴡɴᴇʀ ˼", user_id=7400383704),  # OWNER_ID directly
         InlineKeyboardButton(text="˹ ʜᴇʟᴘ & ᴄᴍᴅs ˼", callback_data="HELP"),
     ],
     [
