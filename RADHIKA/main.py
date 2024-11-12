@@ -15,13 +15,13 @@ import asyncio
 import time
 from datetime import datetime
 from pyrogram import enums
-API_ID = os.environ.get("API_ID","27838385") 
-API_HASH = os.environ.get("API_HASH","0710bd2a89a41c3506f98f7e6fd7294a") 
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "7472927630:AAHT8bO0BnosA4csrx76JZ8MIBS6bBCJAd0") 
+API_ID = os.environ.get("API_ID","") 
+API_HASH = os.environ.get("API_HASH","") 
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "") 
 # Set custom DNS resolver
 dns.resolver.default_resolver = dns.resolver.Resolver(configure=False)
 dns.resolver.default_resolver.nameservers = ['8.8.8.8']  # Google DNS
-MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://teamdaxx123:teamdaxx123@cluster0.ysbpgcp.mongodb.net/?retryWrites=true&w=majority")
+MONGO_URL = os.environ.get("MONGO_URL", "")
 client = MongoClient(MONGO_URL, connectTimeoutMS=30000, serverSelectionTimeoutMS=30000)
 BOT_USERNAME = os.environ.get("BOT_USERNAME","RADHIKA_CHAT_RROBOT") 
 UPDATE_CHNL = os.environ.get("UPDATE_CHNL","BABY09_WORLD")
