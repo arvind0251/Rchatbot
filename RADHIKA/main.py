@@ -29,7 +29,7 @@ OWNER_USERNAME = os.environ.get("OWNER_USERNAME","UTTAM470")
 SUPPORT_GRP = os.environ.get("SUPPORT_GRP","+OL6jdTL7JAJjYzVl")
 BOT_NAME = os.environ.get("BOT_NAME","🐰⃟⃞⍣Rᴀᴅʜɪᴋᴀ❥")
 START_IMG = os.environ.get("START_IMG","https://files.catbox.moe/5dp75k.jpg")
-
+CHANNEL_IMG = os.environ.get("CHANNEL_IMG","https://files.catbox.moe/3ni0t3.jpg")
 STKR = os.environ.get("STKR","CAACAgEAAx0Cd5L74gAClqVmhNlbqSgKMe5TIswcgft9l6uSpgACEQMAAlEpDTnGkK-OP8PZpzUE")
 
 
