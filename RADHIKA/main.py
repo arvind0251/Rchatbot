@@ -106,11 +106,15 @@ PNG_BTN = [
 
 HELP_READ = f"""**~~❖ᴄᴏᴍᴍᴀɴᴅs ғᴏʀ {BOT_NAME}❖~~**\n\n**❍ ᴜsᴇ ||chatbot [on/off]|| ᴇɴᴀʙʟᴇ/ᴅɪsᴀʙʟᴇ ᴛʜᴇ ᴄʜᴀᴛʙᴏᴛ.**\n❍ ɴᴏᴛᴇ ᴛʜᴇ ᴀʙᴏᴠᴇ ᴄᴏᴍᴍᴀɴᴅ ғᴏʀ ᴄʜᴀᴛʙᴏᴛ ᴡᴏʀᴋ ɪɴ ɢʀᴏᴜᴘ ᴏɴʟʏ!!\n**───────────────**\n❍ Bʏ:- ||__**[˹ ʙᴀʙʏ-ᴍᴜsɪᴄ ™˼𓅂](https://t.me/BABY09_WORLD)**__||"""
 HELP_BACK = [
-     
     [
-           InlineKeyboardButton(text="ʙᴀᴄᴋ ", callback_data="HELP_BACK"),
+        InlineKeyboardButton(text="ʏᴛ-ᴍᴜsɪᴄ", url="http://t.me/YOUTUBE_RROBOT"),
+        InlineKeyboardButton(text="ʙᴀʙʏ-ᴍᴜsɪᴄ", url="http://t.me/BABY_MUSIC09_BOT")
+    ],
+    [
+        InlineKeyboardButton(text="ʙᴀᴄᴋ", callback_data="HELP_BACK")
     ]
 ]
+
 @Mukesh.on_message(filters.incoming & filters.private, group=-1)
 async def must_join_channel(bot: Client, msg: Message):
     if not UPDATE_CHNL:
