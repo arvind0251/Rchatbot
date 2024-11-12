@@ -477,9 +477,8 @@ def home():
 def run_flask():
     app.run(host="0.0.0.0", port=8000)
 
-def run_bot():
-    LOGGER.info("RADHIKA ON.\n╔═════ஜ۩۞۩ஜ════╗\n  ♨️𝗠𝗔𝗗𝗘 𝗕𝗬 𝗨𝗧𝗧𝗔𝗠 𝗥𝗔𝗧𝗛𝗢𝗥𝗘♨️\n╚═════ஜ۩۞۩ஜ════╝")
-    AMBOT().run()
+print(f"{BOT_NAME} ɪs ᴀʟɪᴠᴇ!")      
+Mukesh.run()
 
 if __name__ == "__main__":
     # Create a thread for Flask server
