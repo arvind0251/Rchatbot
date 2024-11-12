@@ -55,7 +55,7 @@ g=choice(x)
 async def is_admins(chat_id: int):
     return [
         member.user.id
-        async for member in Mukesh.get_chat_members(
+        async for member in RADHIKA.get_chat_members(
             chat_id, filter=enums.ChatMembersFilter.ADMINISTRATORS
         )
     ]
