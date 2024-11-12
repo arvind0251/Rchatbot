@@ -15,7 +15,7 @@ from datetime import datetime
 from pyrogram import enums
 API_ID = os.environ.get("API_ID","16457832") 
 API_HASH = os.environ.get("API_HASH","3030874d0befdb5d05597deacc3e83ab") 
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "7242058454:AAH24Hp_LNk-QO422ERYmySTnrUn3rYn5A8") 
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "") 
 # Set custom DNS resolver
 dns.resolver.default_resolver = dns.resolver.Resolver(configure=False)
 dns.resolver.default_resolver.nameservers = ['8.8.8.8']  # Google DNS
