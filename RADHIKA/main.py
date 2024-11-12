@@ -3,7 +3,7 @@ from pyrogram.types import *
 from pymongo import MongoClient
 from flask import Flask
 from pyrogram.enums import ChatAction
-from pyrogram.errors import ChatAdminRequired
+from pyrogram.errors import ChatAdminRequired, UserNotParticipant
 import threading
 import requests
 import random
