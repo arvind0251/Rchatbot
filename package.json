@@ -1,0 +1,15 @@
+{
+  "name": "your-project-name",
+  "version": "1.0.0",
+  "scripts": {
+    "build:web": "expo build:web"
+  },
+  "dependencies": {
+    "expo": "^48.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "expo-cli": "^5.0.0"
+  }
+}
