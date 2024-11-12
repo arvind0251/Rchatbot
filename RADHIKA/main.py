@@ -23,18 +23,18 @@ dns.resolver.default_resolver = dns.resolver.Resolver(configure=False)
 dns.resolver.default_resolver.nameservers = ['8.8.8.8']  # Google DNS
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://teamdaxx123:teamdaxx123@cluster0.ysbpgcp.mongodb.net/?retryWrites=true&w=majority")
 client = MongoClient(MONGO_URL, connectTimeoutMS=30000, serverSelectionTimeoutMS=30000)
-BOT_USERNAME = os.environ.get("BOT_USERNAME","ITZ_MERADHIKABOT") 
-UPDATE_CHNL = os.environ.get("UPDATE_CHNL","SHIVANSH474")
-OWNER_USERNAME = os.environ.get("OWNER_USERNAME","SHIVANSHDEVS")
-SUPPORT_GRP = os.environ.get("SUPPORT_GRP","MASTIWITHFRIENDSXD")
+BOT_USERNAME = os.environ.get("BOT_USERNAME","RADHIKA_CHAT_RROBOT") 
+UPDATE_CHNL = os.environ.get("UPDATE_CHNL","BABY09_WORLD")
+OWNER_USERNAME = os.environ.get("OWNER_USERNAME","UTTAM470")
+SUPPORT_GRP = os.environ.get("SUPPORT_GRP","+OL6jdTL7JAJjYzVl")
 BOT_NAME = os.environ.get("BOT_NAME","🐰⃟⃞⍣Rᴀᴅʜɪᴋᴀ❥")
-START_IMG = os.environ.get("START_IMG","https://graph.org/file/6ccfbda0b79239188c14c.jpg")
+START_IMG = os.environ.get("START_IMG","https://files.catbox.moe/5dp75k.jpg")
 
 STKR = os.environ.get("STKR","CAACAgEAAx0Cd5L74gAClqVmhNlbqSgKMe5TIswcgft9l6uSpgACEQMAAlEpDTnGkK-OP8PZpzUE")
 
 
 StartTime = time.time()
-Mukesh = Client(
+RADHIKA = Client(
     "chat-gpt" ,
     api_id = API_ID ,
     api_hash = API_HASH ,
@@ -115,7 +115,7 @@ HELP_BACK = [
     ]
 ]
 
-@Mukesh.on_message(filters.incoming & filters.private, group=-1)
+@RADHIKA.on_message(filters.incoming & filters.private, group=-1)
 async def must_join_channel(bot: Client, msg: Message):
     if not UPDATE_CHNL:
         return
@@ -130,7 +130,7 @@ async def must_join_channel(bot: Client, msg: Message):
                 link = chat_info.invite_link
             try:
                 await msg.reply_photo(
-                    photo=START_IMG, caption=f"» ᴀᴄᴄᴏʀᴅɪɴɢ ᴛᴏ ᴍʏ ᴅᴀᴛᴀʙᴀsᴇ ʏᴏᴜ'ᴠᴇ ɴᴏᴛ ᴊᴏɪɴᴇᴅ [ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ]({link}) ʏᴇᴛ, ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴜsᴇ ᴍᴇ ᴛʜᴇɴ ᴊᴏɪɴ [ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ]({link}) ᴀɴᴅ sᴛᴀʀᴛ ᴍᴇ ᴀɢᴀɪɴ !",
+                    photo=START_IMG, caption=f"Aᴄᴄᴏʀᴅɪɴɢ ᴛᴏ ᴍʏ ᴅᴀᴛᴀʙᴀsᴇ ʏᴏᴜ'ᴠᴇ ɴᴏᴛ ᴊᴏɪɴᴇᴅ [ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ]({link}) ʏᴇᴛ, ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴜsᴇ ᴍ ᴄʜᴀɴɴᴇʟ]({link}) ᴀɴᴅ sᴛᴀʀᴛ ᴍᴇ ᴀɢᴀɪɴ !",
                     reply_markup=InlineKeyboardMarkup(
                         [
                             [
@@ -144,7 +144,7 @@ async def must_join_channel(bot: Client, msg: Message):
                 pass
     except ChatAdminRequired:
         print(f"Promote me as an admin in the UPDATE CHANNEL  : {UPDATE_CHNL} !")
-@Mukesh.on_message(filters.command(["start",f"start@{BOT_USERNAME}"]))
+@RADHIKA.on_message(filters.command(["start",f"start@{BOT_USERNAME}"]))
 async def restart(client, m: Message):
         accha = await m.reply_text(
                         text = f"{g}")
@@ -164,7 +164,7 @@ async def restart(client, m: Message):
             caption=START,
             reply_markup=InlineKeyboardMarkup(MAIN),
         )
-@Mukesh.on_callback_query()
+@RADHIKA.on_callback_query()
 async def cb_handler(Client, query: CallbackQuery):
     if query.data == "HELP":
      await query.message.edit_text(
@@ -181,17 +181,17 @@ async def cb_handler(Client, query: CallbackQuery):
     elif query.data == 'hurr':
         await query.answer()
         await query.message.reply(SOURCE)
-@Mukesh.on_message(filters.command(["help", f"help@{BOT_USERNAME}"], prefixes=["/"]))
+@RADHIKA.on_message(filters.command(["help", f"help@{BOT_USERNAME}"], prefixes=["/"]))
 async def restart(client, message):
     hmm = await message.reply_photo(START_IMG,
                              caption= HELP_READ,
                         reply_markup= InlineKeyboardMarkup(HELP_BACK),
        )
-@Mukesh.on_message(filters.command(['source', 'repo']))
+@RADHIKA.on_message(filters.command(['source', 'repo']))
 async def source(bot, m):
     await m.reply_photo(START_IMG, caption=SOURCE_TEXT, reply_markup=SOURCE_BUTTONS, reply_to_message_id=m.id)
 #  alive
-@Mukesh.on_message(filters.command(["ping","alive"], prefixes=["/"]))
+@RADHIKA.on_message(filters.command(["ping","alive"], prefixes=["/"]))
 async def ping(client, message: Message):
         start = datetime.now()
         t = "__ριиgιиg...__"
@@ -208,7 +208,7 @@ async def ping(client, message: Message):
                              reply_markup=InlineKeyboardMarkup(PNG_BTN),
        )
 
-@Mukesh.on_message(
+@RADHIKA.on_message(
     filters.command(["chatbot off", f"chatbot@{BOT_USERNAME} off"], prefixes=["/"])
     & ~filters.private)
 async def chatbotofd(client, message):
@@ -231,7 +231,7 @@ async def chatbotofd(client, message):
         await message.reply_text(f"ChatBot Already Disabled")
     
 
-@Mukesh.on_message(
+@RADHIKA.on_message(
     filters.command(["chatbot on", f"chatbot@{BOT_USERNAME} on"] ,prefixes=["/"])
     & ~filters.private)
 async def chatboton(client, message):
@@ -254,14 +254,14 @@ async def chatboton(client, message):
         await message.reply_text(f"ChatBot Enabled!")
     
 
-@Mukesh.on_message(
+@RADHIKA.on_message(
     filters.command(["chatbot", f"chatbot@{BOT_USERNAME}"], prefixes=["/"])
     & ~filters.private)
 async def chatbot(client, message):
     await message.reply_text(f"**ᴜsᴀɢᴇ:**\n/**chatbot [on/off]**\n**ᴄʜᴀᴛ-ʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅ(s) ᴡᴏʀᴋ ɪɴ ɢʀᴏᴜᴘ ᴏɴʟʏ!**")
 
 
-@Mukesh.on_message(
+@RADHIKA.on_message(
  (
         filters.text
         | filters.sticker
@@ -327,7 +327,7 @@ async def vickai(client: Client, message: Message):
                    chatai.insert_one({"word": message.reply_to_message.text, "text": message.text, "check": "none"})    
                
 
-@Mukesh.on_message(
+@RADHIKA.on_message(
  (
         filters.sticker
         | filters.text
@@ -394,7 +394,7 @@ async def vickstickerai(client: Client, message: Message):
                
 
 
-@Mukesh.on_message(
+@RADHIKA.on_message(
     (
         filters.text
         | filters.sticker
@@ -437,7 +437,7 @@ async def vickprivate(client: Client, message: Message):
                await message.reply_text(f"{hey}")
        
 
-@Mukesh.on_message(
+@RADHIKA.on_message(
  (
         filters.sticker
         | filters.text
@@ -494,4 +494,4 @@ if __name__ == "__main__":
     flask_thread.start()
 
     # Run the bot in the main thread
-    Mukesh.run()
+    RADHIKA.run()
