@@ -70,7 +70,7 @@ MAIN = [
     ],
     [
         InlineKeyboardButton(
-            text="Owner", 
+            text="ᴏᴡɴᴇʀ", 
             url=f"https://t.me/{OWNER_USERNAME}"
         ),
         InlineKeyboardButton(
@@ -130,7 +130,7 @@ async def must_join_channel(bot: Client, msg: Message):
                 link = chat_info.invite_link
             try:
                 await msg.reply_photo(
-                    photo=START_IMG, caption=f"Aᴄᴄᴏʀᴅɪɴɢ ᴛᴏ ᴍʏ ᴅᴀᴛᴀʙᴀsᴇ ʏᴏᴜ'ᴠᴇ ɴᴏᴛ ᴊᴏɪɴᴇᴅ [ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ]({link}) ʏᴇᴛ, ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴜsᴇ ᴍ ᴄʜᴀɴɴᴇʟ]({link}) ᴀɴᴅ sᴛᴀʀᴛ ᴍᴇ ᴀɢᴀɪɴ !",
+                    photo=CHANNEL_IMG, caption=f"Yᴏᴜ ᴄᴀɴ'ᴛ ᴀᴄᴄᴇss ᴍʏ ᴅᴀᴛᴀʙᴀsᴇ\nғɪʀsᴛ ᴊᴏɪɴᴇᴅ [ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ]({link}),\nᴀɴᴅ sᴛᴀʀᴛ ᴍᴇ ᴀɢᴀɪɴ !",
                     reply_markup=InlineKeyboardMarkup(
                         [
                             [
