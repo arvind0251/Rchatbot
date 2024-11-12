@@ -27,7 +27,7 @@ BOT_USERNAME = os.environ.get("BOT_USERNAME","ITZ_MERADHIKABOT")
 UPDATE_CHNL = os.environ.get("UPDATE_CHNL","SHIVANSH474")
 OWNER_USERNAME = os.environ.get("OWNER_USERNAME","SHIVANSHDEVS")
 SUPPORT_GRP = os.environ.get("SUPPORT_GRP","MASTIWITHFRIENDSXD")
-BOT_NAME = os.environ.get("BOT_NAME","RADHIKA")
+BOT_NAME = os.environ.get("BOT_NAME","🐰⃟⃞⍣Rᴀᴅʜɪᴋᴀ❥")
 START_IMG = os.environ.get("START_IMG","https://graph.org/file/6ccfbda0b79239188c14c.jpg")
 
 STKR = os.environ.get("STKR","CAACAgEAAx0Cd5L74gAClqVmhNlbqSgKMe5TIswcgft9l6uSpgACEQMAAlEpDTnGkK-OP8PZpzUE")
@@ -104,7 +104,7 @@ PNG_BTN = [
      ],
 ]
 
-HELP_READ = f"""**__❍ ᴄᴏᴍᴍᴀɴᴅs ғᴏʀ {BOT_NAME}__**\n**❍ ᴜsᴇ ||chatbot [on/off]|| ᴇɴᴀʙʟᴇ/ᴅɪsᴀʙʟᴇ ᴛʜᴇ ᴄʜᴀᴛʙᴏᴛ.**\n❍ ɴᴏᴛᴇ ᴛʜᴇ ᴀʙᴏᴠᴇ ᴄᴏᴍᴍᴀɴᴅ ғᴏʀ ᴄʜᴀᴛʙᴏᴛ ᴡᴏʀᴋ ɪɴ ɢʀᴏᴜᴘ ᴏɴʟʏ!!\n**───────────────**\n❍ Bʏ:- ||__**[˹ ʙᴀʙʏ-ᴍᴜsɪᴄ ™˼𓅂](https://t.me/BABY09_WORLD)**__||"""
+HELP_READ = f"""**~~❖ᴄᴏᴍᴍᴀɴᴅs ғᴏʀ {BOT_NAME}❖~~**\n\n**❍ ᴜsᴇ ||chatbot [on/off]|| ᴇɴᴀʙʟᴇ/ᴅɪsᴀʙʟᴇ ᴛʜᴇ ᴄʜᴀᴛʙᴏᴛ.**\n❍ ɴᴏᴛᴇ ᴛʜᴇ ᴀʙᴏᴠᴇ ᴄᴏᴍᴍᴀɴᴅ ғᴏʀ ᴄʜᴀᴛʙᴏᴛ ᴡᴏʀᴋ ɪɴ ɢʀᴏᴜᴘ ᴏɴʟʏ!!\n**───────────────**\n❍ Bʏ:- ||__**[˹ ʙᴀʙʏ-ᴍᴜsɪᴄ ™˼𓅂](https://t.me/BABY09_WORLD)**__||"""
 HELP_BACK = [
      
     [
