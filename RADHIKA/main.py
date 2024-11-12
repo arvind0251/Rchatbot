@@ -66,23 +66,33 @@ async def is_admins(chat_id: int):
 
 MAIN = [
     [
-        InlineKeyboardButton(text="ᴅᴇᴠᴇʟᴏᴘᴇʀ", url=f"https://t.me/{OWNER_USERNAME}"),
-        InlineKeyboardButton(text=" ꜱᴜᴘᴘᴏʀᴛ ", url=f"https://t.me/{SUPPORT_GRP}"),
+        InlineKeyboardButton(
+            text="ᴀᴅᴅ ᴍᴇ ʙᴀʙʏ",
+            url=f"https://t.me/{BOT_USERNAME}?startgroup=true"
+        )
     ],
     [
         InlineKeyboardButton(
-            text="ᴀᴅᴅ ᴍᴇ ʙᴀʙʏ",
-            url=f"https://t.me/{BOT_USERNAME}?startgroup=true",
+            text="Owner", 
+            url=f"https://t.me/{OWNER_USERNAME}"
         ),
+        InlineKeyboardButton(
+            text="ʜᴇʟᴘ & ᴄᴍᴅs", 
+            callback_data="HELP"
+        )
     ],
     [
-        InlineKeyboardButton(text="ʜᴇʟᴘ & ᴄᴍᴅs ", callback_data="HELP"),
-    ],
-    [
-        InlineKeyboardButton(text="sᴏᴜʀᴄᴇ ᴄᴏᴅᴇ", callback_data='source'),
-        InlineKeyboardButton(text=" ᴜᴘᴅᴀᴛᴇs ", url=f"https://t.me/{UPDATE_CHNL}"),
-    ],
+        InlineKeyboardButton(
+            text="ꜱᴜᴘᴘᴏʀᴛ", 
+            url=f"https://t.me/{SUPPORT_GRP}"
+        ),
+        InlineKeyboardButton(
+            text="ᴜᴘᴅᴀᴛᴇs", 
+            url=f"https://t.me/{UPDATE_CHNL}"
+        )
+    ]
 ]
+
 PNG_BTN = [
     [
          InlineKeyboardButton(
