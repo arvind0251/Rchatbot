@@ -50,7 +50,6 @@ SOURCE_TEXT = f"""
 ᴄʟɪᴄᴋ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴ ᴛᴏ ɢᴇᴛ ᴛʜᴇ sᴏᴜʀᴄᴇ ᴄᴏᴅᴇ**
 """
 SOURCE_BUTTONS = InlineKeyboardMarkup([[InlineKeyboardButton('sᴏᴜʀᴄᴇ', callback_data='hurr')], [InlineKeyboardButton(" ꜱᴜᴘᴘᴏʀᴛ ", url=f"https://t.me/{SUPPORT_GRP}"), InlineKeyboardButton(text="ʙᴀᴄᴋ ", callback_data="HELP_BACK")]])
-SOURCE = 'https://te.legra.ph/file/ebc3fc421b8776e29ad98.mp4'
 x=["❤️","🎉","✨","🪸","🎉","🎈","🎯"]
 g=choice(x)
 async def is_admins(chat_id: int):
@@ -167,20 +166,22 @@ async def restart(client, m: Message):
 @RADHIKA.on_callback_query()
 async def cb_handler(Client, query: CallbackQuery):
     if query.data == "HELP":
-     await query.message.edit_text(
-                      text = HELP_READ,
-                      reply_markup = InlineKeyboardMarkup(HELP_BACK),
-     )
+        await query.message.edit_text(
+            text=HELP_READ,
+            reply_markup=InlineKeyboardMarkup(HELP_BACK),
+        )
     elif query.data == "HELP_BACK":
-            await query.message.edit(
-                  text = START,
-                  reply_markup=InlineKeyboardMarkup(MAIN),
+        await query.message.edit(
+            text=START,
+            reply_markup=InlineKeyboardMarkup(MAIN),
         )
     elif query.data == 'source':
         await query.message.edit_text(SOURCE_TEXT, reply_markup=SOURCE_BUTTONS)
     elif query.data == 'hurr':
         await query.answer()
-        await query.message.reply(SOURCE)
+        await query.message.reply_video(
+            video="https://te.legra.ph/file/ebc3fc421b8776e29ad98.mp4"  # Yahan apne video ka URL ya local path add karein
+        )
 @RADHIKA.on_message(filters.command(["help", f"help@{BOT_USERNAME}"], prefixes=["/"]))
 async def restart(client, message):
     hmm = await message.reply_photo(START_IMG,
