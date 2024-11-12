@@ -477,13 +477,10 @@ def home():
 def run_flask():
     app.run(host="0.0.0.0", port=8000)
 
-print(f"{BOT_NAME} ɪs ᴀʟɪᴠᴇ!")      
-Mukesh.run()
-
 if __name__ == "__main__":
     # Create a thread for Flask server
     flask_thread = threading.Thread(target=run_flask)
     flask_thread.start()
 
     # Run the bot in the main thread
-    run_bot()
+    Mukesh.run()
