@@ -298,7 +298,7 @@ async def vickai(client: Client, message: Message):
        vickdb = MongoClient(MONGO_URL)
        vick = vickdb["VickDb"]["Vick"] 
        is_vick = vick.find_one({"chat_id": message.chat.id})    
-       getme = await Mukesh.get_me()
+       getme = await RADHIKA.get_me()
        bot_id = getme.id                             
        if message.reply_to_message.from_user.id == bot_id: 
            if not is_vick:                   
