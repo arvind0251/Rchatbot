@@ -180,7 +180,7 @@ async def cb_handler(Client, query: CallbackQuery):
     elif query.data == 'hurr':
         await query.answer()
         await query.message.edit_media(
-            InputMediaVideo(media="https://te.legra.ph/file/ebc3fc421b8776e29ad98.mp4")  # Video URL ya local path yahan add karein
+            InputMediaVideo(media="https://files.catbox.moe/fs8x4n.mp4")  # Video URL ya local path yahan add karein
         )
 @RADHIKA.on_message(filters.command(["help", f"help@{BOT_USERNAME}"], prefixes=["/"]))
 async def restart(client, message):
