@@ -1,10 +1,8 @@
 from pyrogram import Client, filters
 from pyrogram.types import *
 from pymongo import MongoClient
-from flask import Flask
 from pyrogram.enums import ChatAction
 from pyrogram.errors import ChatAdminRequired, UserNotParticipant, ChatWriteForbidden
-import threading
 import requests
 import random
 from random import choice
@@ -480,19 +478,5 @@ async def vickprivatesticker(client: Client, message: Message):
            if not Yo == "text":
                await message.reply_sticker(f"{hey}")
 
-app = Flask(__name__)
 
-@app.route("/")
-def home():
-    return "Bot is running"
-
-def run_flask():
-    app.run(host="0.0.0.0", port=8000)
-
-if __name__ == "__main__":
-    # Create a thread for Flask server
-    flask_thread = threading.Thread(target=run_flask)
-    flask_thread.start()
-
-    # Run the bot in the main thread
     RADHIKA.run()
