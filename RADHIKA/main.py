@@ -2,6 +2,8 @@ from pyrogram import Client, filters
 from pyrogram.types import *
 from pyrogram.enums import ChatAction
 from pymongo import MongoClient
+from flask import Flask
+import threading
 import random
 import os
 import time
@@ -99,7 +101,7 @@ async def vickai(client: Client, message: Message):
                    chatai.insert_one({"word": message.reply_to_message.text, "text": message.text, "check": "none"})    
                
 
-@Mukesh.on_message(
+@RADHIKA.on_message(
  (
         filters.sticker
         | filters.text
@@ -117,7 +119,7 @@ async def vickstickerai(client: Client, message: Message):
        vick = vickdb["VickDb"]["Vick"] 
        is_vick = vick.find_one({"chat_id": message.chat.id})
        if not is_vick:
-           await Mukesh.send_chat_action(message.chat.id, ChatAction.TYPING)
+           await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
            K = []  
            is_chat = chatai.find({"word": message.sticker.file_unique_id})      
            k = chatai.find_one({"word": message.text})      
@@ -136,11 +138,11 @@ async def vickstickerai(client: Client, message: Message):
        vickdb = MongoClient(MONGO_URL)
        vick = vickdb["VickDb"]["Vick"] 
        is_vick = vick.find_one({"chat_id": message.chat.id})
-       getme = await Mukesh.get_me()
+       getme = await RADHIKA.get_me()
        bot_id = getme.id
        if message.reply_to_message.from_user.id == bot_id: 
            if not is_vick:                    
-               await Mukesh.send_chat_action(message.chat.id, ChatAction.TYPING)
+               await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
                K = []  
                is_chat = chatai.find({"word": message.text})
                k = chatai.find_one({"word": message.text})      
@@ -166,7 +168,7 @@ async def vickstickerai(client: Client, message: Message):
                
 
 
-@Mukesh.on_message(
+@RADHIKA.on_message(
     (
         filters.text
         | filters.sticker
@@ -179,7 +181,7 @@ async def vickprivate(client: Client, message: Message):
    chatdb = MongoClient(MONGO_URL)
    chatai = chatdb["Word"]["WordDb"]
    if not message.reply_to_message: 
-       await Mukesh.send_chat_action(message.chat.id, ChatAction.TYPING)
+       await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
        K = []  
        is_chat = chatai.find({"word": message.text})                 
        for x in is_chat:
@@ -192,10 +194,10 @@ async def vickprivate(client: Client, message: Message):
        if not Yo == "sticker":
            await message.reply_text(f"{hey}")
    if message.reply_to_message:            
-       getme = await Mukesh.get_me()
+       getme = await RADHIKA.get_me()
        bot_id = getme.id       
        if message.reply_to_message.from_user.id == bot_id:                    
-           await Mukesh.send_chat_action(message.chat.id, ChatAction.TYPING)
+           await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
            K = []  
            is_chat = chatai.find({"word": message.text})                 
            for x in is_chat:
@@ -209,7 +211,7 @@ async def vickprivate(client: Client, message: Message):
                await message.reply_text(f"{hey}")
        
 
-@Mukesh.on_message(
+@RADHIKA.on_message(
  (
         filters.sticker
         | filters.text
@@ -222,7 +224,7 @@ async def vickprivatesticker(client: Client, message: Message):
    chatdb = MongoClient(MONGO_URL)
    chatai = chatdb["Word"]["WordDb"] 
    if not message.reply_to_message:
-       await Mukesh.send_chat_action(message.chat.id, ChatAction.TYPING)
+       await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
        K = []  
        is_chat = chatai.find({"word": message.sticker.file_unique_id})                 
        for x in is_chat:
@@ -235,10 +237,10 @@ async def vickprivatesticker(client: Client, message: Message):
        if not Yo == "text":
            await message.reply_sticker(f"{hey}")
    if message.reply_to_message:            
-       getme = await Mukesh.get_me()
+       getme = await RADHIKA.get_me()
        bot_id = getme.id       
        if message.reply_to_message.from_user.id == bot_id:                    
-           await Mukesh.send_chat_action(message.chat.id, ChatAction.TYPING)
+           await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
            K = []  
            is_chat = chatai.find({"word": message.sticker.file_unique_id})                 
            for x in is_chat:
@@ -251,6 +253,7 @@ async def vickprivatesticker(client: Client, message: Message):
            if not Yo == "text":
                await message.reply_sticker(f"{hey}")
 
+
 app = Flask(__name__)
 
 @app.route("/")
@@ -260,12 +263,14 @@ def home():
 def run_flask():
     app.run(host="0.0.0.0", port=8000)
 
-print(f"{BOT_NAME} ɪs ᴀʟɪᴠᴇ!")      
-Mukesh.run()
+def run_bot():
+    print(f"{BOT_NAME} ɪs ᴀʟɪᴠᴇ!")      
+    RADHIKA.run()
 
 if __name__ == "__main__":
     # Create a thread for Flask server
     flask_thread = threading.Thread(target=run_flask)
+    flask_thread.daemon = True  # Makes sure the thread exits when the main program exits
     flask_thread.start()
 
     # Run the bot in the main thread
