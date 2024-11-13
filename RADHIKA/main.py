@@ -19,17 +19,6 @@ MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://TEAMBABY01:UTTAMRATHORE09
 client = MongoClient(MONGO_URL, connectTimeoutMS=30000, serverSelectionTimeoutMS=30000)
 db = client["Word"]
 chatai = db["WordDb"]
-
-# Bot and user details
-BOT_USERNAME = os.environ.get("BOT_USERNAME", "RADHIKA_CHAT_RROBOT")
-UPDATE_CHNL = os.environ.get("UPDATE_CHNL", "BABY09_WORLD")
-OWNER_USERNAME = os.environ.get("OWNER_USERNAME", "UTTAM470")
-SUPPORT_GRP = os.environ.get("SUPPORT_GRP", "+OL6jdTL7JAJjYzVl")
-BOT_NAME = os.environ.get("BOT_NAME", "🐰⃟⃞⍣Rᴀᴅʜɪᴋᴀ❥")
-START_IMG = os.environ.get("START_IMG", "https://files.catbox.moe/5dp75k.jpg")
-CHANNEL_IMG = os.environ.get("CHANNEL_IMG", "https://files.catbox.moe/3ni0t3.jpg")
-STKR = os.environ.get("STKR", "CAACAgEAAx0Cd5L74gAClqVmhNlbqSgKMe5TIswcgft9l6uSpgACEQMAAlEpDTnGkK-OP8PZpzUE")
-
 # Initialize bot client
 RADHIKA = Client(
     "chat-gpt",
@@ -62,15 +51,17 @@ async def vickai(client: Client, message: Message):
         if not is_vick:
             await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
 
-            result = chatai.find_one({"word": message.text})
+            # Fetch all matching results for the word
+            results = chatai.find({"word": message.text})
 
-            if result:
+            results_list = list(results)  # Convert the cursor to a list
+            if results_list:
+                # Randomize the response from the results
+                result = random.choice(results_list)
                 if result.get('check') == "sticker":
                     await message.reply_sticker(result['text'])
                 else:
                     await message.reply_text(result['text'])
-
-    # Removed the unnecessary elif block for `message.reply_to_message`
 
 # Handler for private chats (both text and stickers)
 @RADHIKA.on_message((filters.text | filters.sticker) & filters.private & ~filters.bot)
@@ -78,15 +69,17 @@ async def vickprivate(client: Client, message: Message):
     if not message.reply_to_message:
         await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
 
-        result = chatai.find_one({"word": message.text})
+        # Fetch all matching results for the word
+        results = chatai.find({"word": message.text})
 
-        if result:
+        results_list = list(results)  # Convert the cursor to a list
+        if results_list:
+            # Randomize the response from the results
+            result = random.choice(results_list)
             if result.get('check') == "sticker":
                 await message.reply_sticker(result['text'])
             else:
                 await message.reply_text(result['text'])
-
-    # Removed the unnecessary elif block for `message.reply_to_message`
 
 # Flask web server (to keep the bot alive)
 app = Flask(__name__)
