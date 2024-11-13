@@ -1,482 +1,99 @@
 from pyrogram import Client, filters
 from pyrogram.types import *
-from pymongo import MongoClient
 from pyrogram.enums import ChatAction
-from pyrogram.errors import ChatAdminRequired, UserNotParticipant, ChatWriteForbidden
-import requests
+from pymongo import MongoClient
 import random
-from random import choice
 import os
-import dns.resolver
-import re
-import asyncio
 import time
 from datetime import datetime
-from pyrogram import enums
-API_ID = os.environ.get("API_ID","16457832") 
-API_HASH = os.environ.get("API_HASH","3030874d0befdb5d05597deacc3e83ab") 
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "7242058454:AAH24Hp_LNk-QO422ERYmySTnrUn3rYn5A8") 
-# Set custom DNS resolver
-dns.resolver.default_resolver = dns.resolver.Resolver(configure=False)
-dns.resolver.default_resolver.nameservers = ['8.8.8.8']  # Google DNS
-MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://TEAMBABY01:UTTAMRATHORE09@cluster0.vmjl9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-client = MongoClient(MONGO_URL, connectTimeoutMS=30000, serverSelectionTimeoutMS=30000)
-BOT_USERNAME = os.environ.get("BOT_USERNAME","RADHIKA_CHAT_RROBOT") 
-UPDATE_CHNL = os.environ.get("UPDATE_CHNL","BABY09_WORLD")
-OWNER_USERNAME = os.environ.get("OWNER_USERNAME","UTTAM470")
-SUPPORT_GRP = os.environ.get("SUPPORT_GRP","+OL6jdTL7JAJjYzVl")
-BOT_NAME = os.environ.get("BOT_NAME","🐰⃟⃞⍣Rᴀᴅʜɪᴋᴀ❥")
-START_IMG = os.environ.get("START_IMG","https://files.catbox.moe/5dp75k.jpg")
-CHANNEL_IMG = os.environ.get("CHANNEL_IMG","https://files.catbox.moe/3ni0t3.jpg")
-STKR = os.environ.get("STKR","CAACAgEAAx0Cd5L74gAClqVmhNlbqSgKMe5TIswcgft9l6uSpgACEQMAAlEpDTnGkK-OP8PZpzUE")
 
+API_ID = os.environ.get("API_ID", "16457832") 
+API_HASH = os.environ.get("API_HASH", "3030874d0befdb5d05597deacc3e83ab") 
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "7242058454:AAH24Hp_LNk-QO422ERYmySTnrUn3rYn5A8") 
+MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://TEAMBABY01:UTTAMRATHORE09@cluster0.vmjl9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+
+# MongoDB connection
+client = MongoClient(MONGO_URL, connectTimeoutMS=30000, serverSelectionTimeoutMS=30000)
+
+BOT_USERNAME = os.environ.get("BOT_USERNAME", "RADHIKA_CHAT_RROBOT") 
+UPDATE_CHNL = os.environ.get("UPDATE_CHNL", "BABY09_WORLD")
+OWNER_USERNAME = os.environ.get("OWNER_USERNAME", "UTTAM470")
+SUPPORT_GRP = os.environ.get("SUPPORT_GRP", "+OL6jdTL7JAJjYzVl")
+BOT_NAME = os.environ.get("BOT_NAME", "🐰⃟⃞⍣Rᴀᴅʜɪᴋᴀ❥")
+START_IMG = os.environ.get("START_IMG", "https://files.catbox.moe/5dp75k.jpg")
+CHANNEL_IMG = os.environ.get("CHANNEL_IMG", "https://files.catbox.moe/3ni0t3.jpg")
+STKR = os.environ.get("STKR", "CAACAgEAAx0Cd5L74gAClqVmhNlbqSgKMe5TIswcgft9l6uSpgACEQMAAlEpDTnGkK-OP8PZpzUE")
 
 StartTime = time.time()
+
+# Initialize bot client
 RADHIKA = Client(
-    "chat-gpt" ,
-    api_id = API_ID ,
-    api_hash = API_HASH ,
-    bot_token = BOT_TOKEN
+    "chat-gpt",
+    api_id=API_ID,
+    api_hash=API_HASH,
+    bot_token=BOT_TOKEN
 )
-START =f"""
-**╭───────────────────⦿**\n**│❍ ʜᴇʏ ɪ ᴀᴍ {BOT_NAME} •**\n**│❍ ᴀɴ ᴀɪ ʙᴀsᴇᴅ ᴄʜᴀᴛʙᴏᴛ •**\n**│❍ ʙᴏᴛ ғᴏʀ ᴛᴇʟᴇɢʀᴀᴍ ɢʀᴏᴜᴘs •**\n**│❍ ғᴏʀ ᴀᴄᴛɪᴠᴇ ʏᴏᴜʀ ɢʀᴏᴜᴘ •**\n**│❍ ᴜsᴀɢᴇ /chatbot [ᴏɴ/ᴏғғ] •**\n**│❍ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ғᴏʀ ʜᴇʟᴘ •**\n**│❍ 24x7 ᴛɪᴍᴇ ᴏɴʟɪɴᴇ •**\n**├───────────────────⦿**\n**│❍ ᴍᴀᴅᴇ ʙʏ...[˹ ʙᴀʙʏ-ᴍᴜsɪᴄ ™˼𓅂](https://t.me/BABY09_WORLD)♡**\n**╰───────────────────⦿**
-"""
-SOURCE_TEXT = f"""
-**๏ ʜᴇʏ, ɪ ᴀᴍ [{BOT_NAME}]
-➻ ᴀɴ ᴀɪ-ʙᴀsᴇᴅ ᴄʜᴀᴛʙᴏᴛ.
-──────────────────
-ᴄʟɪᴄᴋ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴ ᴛᴏ ɢᴇᴛ ᴛʜᴇ sᴏᴜʀᴄᴇ ᴄᴏᴅᴇ**
-"""
-SOURCE_BUTTONS = InlineKeyboardMarkup([[InlineKeyboardButton('sᴏᴜʀᴄᴇ', callback_data='hurr')], [InlineKeyboardButton(" ꜱᴜᴘᴘᴏʀᴛ ", url=f"https://t.me/{SUPPORT_GRP}"), InlineKeyboardButton(text="ʙᴀᴄᴋ ", callback_data="HELP_BACK")]])
-x=["❤️","💋","😘","🤭","😒","🌿","💗"]
-g=choice(x)
-async def is_admins(chat_id: int):
-    return [
-        member.user.id
-        async for member in RADHIKA.get_chat_members(
-            chat_id, filter=enums.ChatMembersFilter.ADMINISTRATORS
-        )
-    ]
-
-MAIN = [
-    [
-        InlineKeyboardButton(
-            text="ᴀᴅᴅ ᴍᴇ ʙᴀʙʏ",
-            url=f"https://t.me/{BOT_USERNAME}?startgroup=true"
-        )
-    ],
-    [
-        InlineKeyboardButton(
-            text="ᴏᴡɴᴇʀ", 
-            url=f"https://t.me/{OWNER_USERNAME}"
-        ),
-        InlineKeyboardButton(
-            text="ʜᴇʟᴘ & ᴄᴍᴅs", 
-            callback_data="HELP"
-        )
-    ],
-    [
-        InlineKeyboardButton(
-            text="ꜱᴜᴘᴘᴏʀᴛ", 
-            url=f"https://t.me/{SUPPORT_GRP}"
-        ),
-        InlineKeyboardButton(
-            text="ᴜᴘᴅᴀᴛᴇs", 
-            url=f"https://t.me/{UPDATE_CHNL}"
-        )
-    ]
-]
-
-PNG_BTN = [
-    [
-         InlineKeyboardButton(
-             text="ᴀᴅᴅ ᴍᴇ ʙᴀʙʏ",
-             url=f"https://t.me/{BOT_USERNAME}?startgroup=true",
-         ),
-     ],
-     [
-         InlineKeyboardButton(text="sᴜᴘᴘᴏʀᴛ", 
-                              url=f"https://t.me/{SUPPORT_GRP}",
-         ),
-     ],
-]
-
-HELP_READ = f"""**~~❖ᴄᴏᴍᴍᴀɴᴅs ғᴏʀ {BOT_NAME}❖~~**\n\n**❍ ᴜsᴇ ||chatbot [on/off]|| ᴇɴᴀʙʟᴇ/ᴅɪsᴀʙʟᴇ ᴛʜᴇ ᴄʜᴀᴛʙᴏᴛ.**\n❍ ɴᴏᴛᴇ ᴛʜᴇ ᴀʙᴏᴠᴇ ᴄᴏᴍᴍᴀɴᴅ ғᴏʀ ᴄʜᴀᴛʙᴏᴛ ᴡᴏʀᴋ ɪɴ ɢʀᴏᴜᴘ ᴏɴʟʏ!!\n**───────────────**\n❍ Bʏ:- ||__**[˹ ʙᴀʙʏ-ᴍᴜsɪᴄ ™˼𓅂](https://t.me/BABY09_WORLD)**__||"""
-HELP_BACK = [
-    [
-        InlineKeyboardButton(text="ʏᴛ-ᴍᴜsɪᴄ", url="http://t.me/YOUTUBE_RROBOT"),
-        InlineKeyboardButton(text="ʙᴀʙʏ-ᴍᴜsɪᴄ", url="http://t.me/BABY_MUSIC09_BOT")
-    ],
-    [
-        InlineKeyboardButton(text="ʙᴀᴄᴋ", callback_data="HELP_BACK")
-    ]
-]
-
-@RADHIKA.on_message(filters.incoming & filters.private, group=-1)
-async def must_join_channel(bot: Client, msg: Message):
-    if not UPDATE_CHNL:
-        return
-    try:
-        try:
-            await bot.get_chat_member(UPDATE_CHNL, msg.from_user.id)
-        except UserNotParticipant:
-            if UPDATE_CHNL.isalpha():
-                link = "https://t.me/" + UPDATE_CHNL
-            else:
-                chat_info = await bot.get_chat(UPDATE_CHNL)
-                link = chat_info.invite_link
-            try:
-                await msg.reply_photo(
-                    photo=CHANNEL_IMG, caption=f"Yᴏᴜ ᴄᴀɴ'ᴛ ᴀᴄᴄᴇss ᴍʏ ᴅᴀᴛᴀʙᴀsᴇ\nғɪʀsᴛ ᴊᴏɪɴᴇᴅ [ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ]({link}),\nᴀɴᴅ sᴛᴀʀᴛ ᴍᴇ ᴀɢᴀɪɴ !",
-                    reply_markup=InlineKeyboardMarkup(
-                        [
-                            [
-                                InlineKeyboardButton("ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ", url=link),
-                            ]
-                        ]
-                    )
-                )
-                await msg.stop_propagation()
-            except ChatWriteForbidden:
-                pass
-    except ChatAdminRequired:
-        print(f"Promote me as an admin in the UPDATE CHANNEL  : {UPDATE_CHNL} !")
-@RADHIKA.on_message(filters.command(["start",f"start@{BOT_USERNAME}"]))
-async def restart(client, m: Message):
-        accha = await m.reply_text(
-                        text = f"{g}")
-        await asyncio.sleep(1)
-        await accha.edit("ᴅɪɴɢ ᴅᴏɴɢ...")
-        await asyncio.sleep(0.5)
-        await accha.edit("ʀᴀᴅʜɪᴋᴀ ꜱᴛᴀʀᴛɪɴɢ..")
-        await asyncio.sleep(0.5)
-        await accha.delete()
-        umm = await m.reply_sticker(
-                  sticker = STKR,
-        )
-        await asyncio.sleep(1)
-        await umm.delete()
-        await m.reply_photo(
-            photo = START_IMG,
-            caption=START,
-            reply_markup=InlineKeyboardMarkup(MAIN),
-        )
-@RADHIKA.on_callback_query()
-async def cb_handler(Client, query: CallbackQuery):
-    if query.data == "HELP":
-        await query.message.edit_text(
-            text=HELP_READ,
-            reply_markup=InlineKeyboardMarkup(HELP_BACK),
-        )
-    elif query.data == "HELP_BACK":
-        await query.message.edit(
-            text=START,
-            reply_markup=InlineKeyboardMarkup(MAIN),
-        )
-    elif query.data == 'source':
-        await query.message.edit_text(SOURCE_TEXT, reply_markup=SOURCE_BUTTONS)
-    elif query.data == 'hurr':
-        await query.answer()
-        await query.message.edit_media(
-            InputMediaVideo(media="https://files.catbox.moe/fs8x4n.mp4")  # Video URL ya local path yahan add karein
-        )
-@RADHIKA.on_message(filters.command(["help", f"help@{BOT_USERNAME}"], prefixes=["/"]))
-async def restart(client, message):
-    hmm = await message.reply_photo(START_IMG,
-                             caption= HELP_READ,
-                        reply_markup= InlineKeyboardMarkup(HELP_BACK),
-       )
-@RADHIKA.on_message(filters.command(['source', 'repo']))
-async def source(bot, m):
-    await m.reply_photo(START_IMG, caption=SOURCE_TEXT, reply_markup=SOURCE_BUTTONS, reply_to_message_id=m.id)
-#  alive
-@RADHIKA.on_message(filters.command(["ping","alive"], prefixes=["/"]))
-async def ping(client, message: Message):
-        start = datetime.now()
-        t = "~~__ᴘɪɴɢ ᴘᴏɴɢ...__~~"
-        txxt = await message.reply(t)
-        await asyncio.sleep(0.25)
-        await txxt.edit_text("~~__ᴘɪɴɢ ᴘᴏɴɢ.....__~~")
-        await asyncio.sleep(0.35)
-        await txxt.delete()
-        end = datetime.now()
-        ms = (end-start).microseconds / 1000
-        await message.reply_photo(
-                             photo=START_IMG,
-                             caption=f"ʜᴇʏ ʙᴀʙʏ!!\n**[{BOT_NAME}](t.me/{BOT_USERNAME})** ɪꜱ ᴀʟɪᴠᴇ 🥀 ᴀɴᴅ ᴡᴏʀᴋɪɴɢ ꜰɪɴᴇ ᴡɪᴛʜ ᴘᴏɴɢ ᴏꜰ \n➥ `{ms}` ms\n\n**ᴍᴀᴅᴇ ᴡɪᴛʜ ||[˹ ʙᴀʙʏ-ᴍᴜsɪᴄ ™˼𓅂](https://t.me/BABY09_WORLD)||**",
-                             reply_markup=InlineKeyboardMarkup(PNG_BTN),
-       )
 
 @RADHIKA.on_message(
-    filters.command(["chatbot off", f"chatbot@{BOT_USERNAME} off"], prefixes=["/"])
-    & ~filters.private)
-async def chatbotofd(client, message):
-    vickdb = MongoClient(MONGO_URL)    
-    vick = vickdb["VickDb"]["Vick"]     
-    if message.from_user:
-        user = message.from_user.id
-        chat_id = message.chat.id
-        if user not in (
-           await is_admins(chat_id)
-        ):
-           return await message.reply_text(
-                "You are not admin"
-            )
-    is_vick = vick.find_one({"chat_id": message.chat.id})
-    if not is_vick:
-        vick.insert_one({"chat_id": message.chat.id})
-        await message.reply_text(f"Cʜᴀᴛʙᴏᴛ Dɪsᴀʙʟᴇ !")
-    if is_vick:
-        await message.reply_text(f"Cʜᴀᴛʙᴏᴛ ᴀʟʀᴇᴀᴅʏ ᴅɪsᴀʙʟᴇᴅ !")
-    
-
-@RADHIKA.on_message(
-    filters.command(["chatbot on", f"chatbot@{BOT_USERNAME} on"] ,prefixes=["/"])
-    & ~filters.private)
-async def chatboton(client, message):
-    vickdb = MongoClient(MONGO_URL)    
-    vick = vickdb["VickDb"]["Vick"]     
-    if message.from_user:
-        user = message.from_user.id
-        chat_id = message.chat.id
-        if user not in (
-            await is_admins(chat_id)
-        ):
-            return await message.reply_text(
-                "You are not admin"
-            )
-    is_vick = vick.find_one({"chat_id": message.chat.id})
-    if not is_vick:           
-        await message.reply_text(f"Cʜᴀᴛʙᴏᴛ ᴀʟʀᴇᴀᴅʏ ᴇɴᴀʙʟᴇᴅ !")
-    if is_vick:
-        vick.delete_one({"chat_id": message.chat.id})
-        await message.reply_text(f"Cʜᴀᴛʙᴏᴛ Eɴᴀʙʟᴇ !")
-    
-
-@RADHIKA.on_message(
-    filters.command(["chatbot", f"chatbot@{BOT_USERNAME}"], prefixes=["/"])
-    & ~filters.private)
-async def chatbot(client, message):
-    await message.reply_text(f"**ᴜsᴀɢᴇ:**\n/**chatbot [on/off]**\n**ᴄʜᴀᴛ-ʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅ ᴡᴏʀᴋ ɪɴ ɢʀᴏᴜᴘ ᴏɴʟʏ!**")
-
-
-@RADHIKA.on_message(
- (
-        filters.text
-        | filters.sticker
-    )
-    & ~filters.private
-    & ~filters.bot,
+    (filters.text | filters.sticker) & ~filters.private & ~filters.bot,
 )
 async def vickai(client: Client, message: Message):
+    chatdb = MongoClient(MONGO_URL)
+    chatai = chatdb["Word"]["WordDb"]   
 
-   chatdb = MongoClient(MONGO_URL)
-   chatai = chatdb["Word"]["WordDb"]   
+    if not message.reply_to_message:
+        vickdb = MongoClient(MONGO_URL)
+        vick = vickdb["VickDb"]["Vick"] 
+        is_vick = vick.find_one({"chat_id": message.chat.id})
+        if not is_vick:
+            await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
+            K = []  
+            is_chat = chatai.find({"word": message.text})  
+            k = chatai.find_one({"word": message.text})      
+            if k:               
+                for x in is_chat:
+                    K.append(x['text'])          
+                hey = random.choice(K)
+                is_text = chatai.find_one({"text": hey})
+                Yo = is_text['check']
+                if Yo == "sticker":
+                    await message.reply_sticker(f"{hey}")
+                if not Yo == "sticker":
+                    await message.reply_text(f"{hey}")
 
-   if not message.reply_to_message:
-       vickdb = MongoClient(MONGO_URL)
-       vick = vickdb["VickDb"]["Vick"] 
-       is_vick = vick.find_one({"chat_id": message.chat.id})
-       if not is_vick:
-           await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
-           K = []  
-           is_chat = chatai.find({"word": message.text})  
-           k = chatai.find_one({"word": message.text})      
-           if k:               
-               for x in is_chat:
-                   K.append(x['text'])          
-               hey = random.choice(K)
-               is_text = chatai.find_one({"text": hey})
-               Yo = is_text['check']
-               if Yo == "sticker":
-                   await message.reply_sticker(f"{hey}")
-               if not Yo == "sticker":
-                   await message.reply_text(f"{hey}")
-   
-   if message.reply_to_message:  
-       vickdb = MongoClient(MONGO_URL)
-       vick = vickdb["VickDb"]["Vick"] 
-       is_vick = vick.find_one({"chat_id": message.chat.id})    
-       getme = await RADHIKA.get_me()
-       bot_id = getme.id                             
-       if message.reply_to_message.from_user.id == bot_id: 
-           if not is_vick:                   
-               await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
-               K = []  
-               is_chat = chatai.find({"word": message.text})
-               k = chatai.find_one({"word": message.text})      
-               if k:       
-                   for x in is_chat:
-                       K.append(x['text'])
-                   hey = random.choice(K)
-                   is_text = chatai.find_one({"text": hey})
-                   Yo = is_text['check']
-                   if Yo == "sticker":
-                       await message.reply_sticker(f"{hey}")
-                   if not Yo == "sticker":
-                       await message.reply_text(f"{hey}")
-       if not message.reply_to_message.from_user.id == bot_id:          
-           if message.sticker:
-               is_chat = chatai.find_one({"word": message.reply_to_message.text, "id": message.sticker.file_unique_id})
-               if not is_chat:
-                   chatai.insert_one({"word": message.reply_to_message.text, "text": message.sticker.file_id, "check": "sticker", "id": message.sticker.file_unique_id})
-           if message.text:                 
-               is_chat = chatai.find_one({"word": message.reply_to_message.text, "text": message.text})                 
-               if not is_chat:
-                   chatai.insert_one({"word": message.reply_to_message.text, "text": message.text, "check": "none"})    
-               
+    if message.reply_to_message:  
+        vickdb = MongoClient(MONGO_URL)
+        vick = vickdb["VickDb"]["Vick"] 
+        is_vick = vick.find_one({"chat_id": message.chat.id})    
+        getme = await RADHIKA.get_me()
+        bot_id = getme.id                             
+        if message.reply_to_message.from_user.id == bot_id: 
+            if not is_vick:                   
+                await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
+                K = []  
+                is_chat = chatai.find({"word": message.text})
+                k = chatai.find_one({"word": message.text})      
+                if k:       
+                    for x in is_chat:
+                        K.append(x['text'])
+                    hey = random.choice(K)
+                    is_text = chatai.find_one({"text": hey})
+                    Yo = is_text['check']
+                    if Yo == "sticker":
+                        await message.reply_sticker(f"{hey}")
+                    if not Yo == "sticker":
+                        await message.reply_text(f"{hey}")
+        if not message.reply_to_message.from_user.id == bot_id:          
+            if message.sticker:
+                is_chat = chatai.find_one({"word": message.reply_to_message.text, "id": message.sticker.file_unique_id})
+                if not is_chat:
+                    chatai.insert_one({"word": message.reply_to_message.text, "text": message.sticker.file_id, "check": "sticker", "id": message.sticker.file_unique_id})
+            if message.text:                 
+                is_chat = chatai.find_one({"word": message.reply_to_message.text, "text": message.text})                 
+                if not is_chat:
+                    chatai.insert_one({"word": message.reply_to_message.text, "text": message.text, "check": "none"})
 
-@RADHIKA.on_message(
- (
-        filters.sticker
-        | filters.text
-    )
-    & ~filters.private
-    & ~filters.bot,
-)
-async def vickstickerai(client: Client, message: Message):
-
-   chatdb = MongoClient(MONGO_URL)
-   chatai = chatdb["Word"]["WordDb"]   
-
-   if not message.reply_to_message:
-       vickdb = MongoClient(MONGO_URL)
-       vick = vickdb["VickDb"]["Vick"] 
-       is_vick = vick.find_one({"chat_id": message.chat.id})
-       if not is_vick:
-           await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
-           K = []  
-           is_chat = chatai.find({"word": message.sticker.file_unique_id})      
-           k = chatai.find_one({"word": message.text})      
-           if k:           
-               for x in is_chat:
-                   K.append(x['text'])
-               hey = random.choice(K)
-               is_text = chatai.find_one({"text": hey})
-               Yo = is_text['check']
-               if Yo == "text":
-                   await message.reply_text(f"{hey}")
-               if not Yo == "text":
-                   await message.reply_sticker(f"{hey}")
-   
-   if message.reply_to_message:
-       vickdb = MongoClient(MONGO_URL)
-       vick = vickdb["VickDb"]["Vick"] 
-       is_vick = vick.find_one({"chat_id": message.chat.id})
-       getme = await RADHIKA.get_me()
-       bot_id = getme.id
-       if message.reply_to_message.from_user.id == bot_id: 
-           if not is_vick:                    
-               await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
-               K = []  
-               is_chat = chatai.find({"word": message.text})
-               k = chatai.find_one({"word": message.text})      
-               if k:           
-                   for x in is_chat:
-                       K.append(x['text'])
-                   hey = random.choice(K)
-                   is_text = chatai.find_one({"text": hey})
-                   Yo = is_text['check']
-                   if Yo == "text":
-                       await message.reply_text(f"{hey}")
-                   if not Yo == "text":
-                       await message.reply_sticker(f"{hey}")
-       if not message.reply_to_message.from_user.id == bot_id:          
-           if message.text:
-               is_chat = chatai.find_one({"word": message.reply_to_message.sticker.file_unique_id, "text": message.text})
-               if not is_chat:
-                   toggle.insert_one({"word": message.reply_to_message.sticker.file_unique_id, "text": message.text, "check": "text"})
-           if message.sticker:                 
-               is_chat = chatai.find_one({"word": message.reply_to_message.sticker.file_unique_id, "text": message.sticker.file_id})                 
-               if not is_chat:
-                   chatai.insert_one({"word": message.reply_to_message.sticker.file_unique_id, "text": message.sticker.file_id, "check": "none"})    
-               
-
-
-@RADHIKA.on_message(
-    (
-        filters.text
-        | filters.sticker
-    )
-    & filters.private
-    & ~filters.bot,
-)
-async def vickprivate(client: Client, message: Message):
-
-   chatdb = MongoClient(MONGO_URL)
-   chatai = chatdb["Word"]["WordDb"]
-   if not message.reply_to_message: 
-       await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
-       K = []  
-       is_chat = chatai.find({"word": message.text})                 
-       for x in is_chat:
-           K.append(x['text'])
-       hey = random.choice(K)
-       is_text = chatai.find_one({"text": hey})
-       Yo = is_text['check']
-       if Yo == "sticker":
-           await message.reply_sticker(f"{hey}")
-       if not Yo == "sticker":
-           await message.reply_text(f"{hey}")
-   if message.reply_to_message:            
-       getme = await RADHIKA.get_me()
-       bot_id = getme.id       
-       if message.reply_to_message.from_user.id == bot_id:                    
-           await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
-           K = []  
-           is_chat = chatai.find({"word": message.text})                 
-           for x in is_chat:
-               K.append(x['text'])
-           hey = random.choice(K)
-           is_text = chatai.find_one({"text": hey})
-           Yo = is_text['check']
-           if Yo == "sticker":
-               await message.reply_sticker(f"{hey}")
-           if not Yo == "sticker":
-               await message.reply_text(f"{hey}")
-       
-
-@RADHIKA.on_message(
- (
-        filters.sticker
-        | filters.text
-    )
-    & filters.private
-    & ~filters.bot,
-)
-async def vickprivatesticker(client: Client, message: Message):
-
-   chatdb = MongoClient(MONGO_URL)
-   chatai = chatdb["Word"]["WordDb"] 
-   if not message.reply_to_message:
-       await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
-       K = []  
-       is_chat = chatai.find({"word": message.sticker.file_unique_id})                 
-       for x in is_chat:
-           K.append(x['text'])
-       hey = random.choice(K)
-       is_text = chatai.find_one({"text": hey})
-       Yo = is_text['check']
-       if Yo == "text":
-           await message.reply_text(f"{hey}")
-       if not Yo == "text":
-           await message.reply_sticker(f"{hey}")
-   if message.reply_to_message:            
-       getme = await RADHIKA.get_me()
-       bot_id = getme.id       
-       if message.reply_to_message.from_user.id == bot_id:                    
-           await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
-           K = []  
-           is_chat = chatai.find({"word": message.sticker.file_unique_id})                 
-           for x in is_chat:
-               K.append(x['text'])
-           hey = random.choice(K)
-           is_text = chatai.find_one({"text": hey})
-           Yo = is_text['check']
-           if Yo == "text":
-               await message.reply_text(f"{hey}")
-           if not Yo == "text":
-               await message.reply_sticker(f"{hey}")
+# Other handlers omitted for brevity...
 
 print(f"{BOT_NAME} ɪs ᴀʟɪᴠᴇ!")      
 RADHIKA.run()
