@@ -36,6 +36,20 @@ RADHIKA = Client(
     bot_token=BOT_TOKEN
 )
 
+# Start command handler for private chats
+@RADHIKA.on_message(filters.command("start") & filters.private)
+async def start(client: Client, message: Message):
+    # Send message with a button
+    keyboard = [
+        [
+            InlineKeyboardButton("Join 🤒", url="https://t.me/BABY09_WORLD")
+        ]
+    ]
+    await message.reply(
+        "Hii, I am Radhika Baby, How are you?",
+        reply_markup=InlineKeyboardMarkup(keyboard)
+    )
+
 # Handler for non-private chats (both text and stickers)
 @RADHIKA.on_message((filters.text | filters.sticker) & ~filters.private & ~filters.bot)
 async def vickai(client: Client, message: Message):
@@ -134,4 +148,4 @@ if __name__ == "__main__":
 
     # Run the bot in the main thread
     run_bot()
-        
+    
