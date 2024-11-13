@@ -95,7 +95,7 @@ def keep_alive():
     while True:
         try:
             # Apne Render app ya kisi bhi remote URL ko ping karein
-            requests.get("https://satya-userbot.onrender.com")
+            requests.get("https://radhika-0xf7.onrender.com")
         except Exception as e:
             print(f"Ping error: {e}")
         time.sleep(300)  # Har 5 minute mein ping bhejna
