@@ -33,7 +33,7 @@ RADHIKA = Client(
     api_hash=API_HASH,
     bot_token=BOT_TOKEN
 )
-@Mukesh.on_message(
+@RADHIKA.on_message(
  (
         filters.text
         | filters.sticker
@@ -51,7 +51,7 @@ async def vickai(client: Client, message: Message):
        vick = vickdb["VickDb"]["Vick"] 
        is_vick = vick.find_one({"chat_id": message.chat.id})
        if not is_vick:
-           await Mukesh.send_chat_action(message.chat.id, ChatAction.TYPING)
+           await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
            K = []  
            is_chat = chatai.find({"word": message.text})  
            k = chatai.find_one({"word": message.text})      
@@ -70,11 +70,11 @@ async def vickai(client: Client, message: Message):
        vickdb = MongoClient(MONGO_URL)
        vick = vickdb["VickDb"]["Vick"] 
        is_vick = vick.find_one({"chat_id": message.chat.id})    
-       getme = await Mukesh.get_me()
+       getme = await RADHIKA.get_me()
        bot_id = getme.id                             
        if message.reply_to_message.from_user.id == bot_id: 
            if not is_vick:                   
-               await Mukesh.send_chat_action(message.chat.id, ChatAction.TYPING)
+               await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
                K = []  
                is_chat = chatai.find({"word": message.text})
                k = chatai.find_one({"word": message.text})      
