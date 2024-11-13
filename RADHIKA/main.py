@@ -70,7 +70,7 @@ async def vickai(client: Client, message: Message):
                 else:
                     await message.reply_text(result['text'])
             else:
-                await message.reply_text("No matching response found.")
+
 
     # Agar message reply hai
     elif message.reply_to_message:
@@ -89,7 +89,7 @@ async def vickai(client: Client, message: Message):
                 else:
                     await message.reply_text(result['text'])
             else:
-                await message.reply_text("No matching response found.")
+
 
 # Handler for private chats (both text and stickers)
 @RADHIKA.on_message((filters.text | filters.sticker) & filters.private & ~filters.bot)
@@ -106,7 +106,7 @@ async def vickprivate(client: Client, message: Message):
             else:
                 await message.reply_text(result['text'])
         else:
-            await message.reply_text("No matching response found.")
+
 
     elif message.reply_to_message:
         getme = await RADHIKA.get_me()
@@ -124,7 +124,7 @@ async def vickprivate(client: Client, message: Message):
                 else:
                     await message.reply_text(result['text'])
             else:
-                await message.reply_text("No matching response found.")
+
 
 # Flask web server (Yeh functionality server ko run karne ke liye hai, isse koi direct effect nahi padega bot ki speed pe)
 app = Flask(__name__)
