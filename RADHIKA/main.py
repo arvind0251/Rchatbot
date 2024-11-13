@@ -14,12 +14,22 @@ API_ID = os.environ.get("API_ID", "16457832")
 API_HASH = os.environ.get("API_HASH", "3030874d0befdb5d05597deacc3e83ab")
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "7242058454:AAH24Hp_LNk-QO422ERYmySTnrUn3rYn5A8")
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://TEAMBABY01:UTTAMRATHORE09@cluster0.vmjl9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-BOT_NAME = os.environ.get("BOT_NAME", "🐰⃟⃞⍣Rᴀᴅʜɪᴋᴀ❥")
 
 # MongoDB connection
 client = MongoClient(MONGO_URL, connectTimeoutMS=30000, serverSelectionTimeoutMS=30000)
 db = client["Word"]
 chatai = db["WordDb"]
+
+# Bot and user details
+BOT_USERNAME = os.environ.get("BOT_USERNAME", "RADHIKA_CHAT_RROBOT")
+UPDATE_CHNL = os.environ.get("UPDATE_CHNL", "BABY09_WORLD")
+OWNER_USERNAME = os.environ.get("OWNER_USERNAME", "UTTAM470")
+SUPPORT_GRP = os.environ.get("SUPPORT_GRP", "+OL6jdTL7JAJjYzVl")
+BOT_NAME = os.environ.get("BOT_NAME", "🐰⃟⃞⍣Rᴀᴅʜɪᴋᴀ❥")
+START_IMG = os.environ.get("START_IMG", "https://files.catbox.moe/5dp75k.jpg")
+CHANNEL_IMG = os.environ.get("CHANNEL_IMG", "https://files.catbox.moe/3ni0t3.jpg")
+STKR = os.environ.get("STKR", "CAACAgEAAx0Cd5L74gAClqVmhNlbqSgKMe5TIswcgft9l6uSpgACEQMAAlEpDTnGkK-OP8PZpzUE")
+
 # Initialize bot client
 RADHIKA = Client(
     "chat-gpt",
@@ -55,7 +65,9 @@ async def vickai(client: Client, message: Message):
             # Fetch all matching results for the word
             results = chatai.find({"word": message.text})
 
-            results_list = list(results)  # Convert the cursor to a list
+            # Convert cursor to a list
+            results_list = list(results)  # Ensure that `results` is converted correctly to a list
+
             if results_list:
                 # Randomize the response from the results
                 result = random.choice(results_list)
@@ -73,7 +85,9 @@ async def vickprivate(client: Client, message: Message):
         # Fetch all matching results for the word
         results = chatai.find({"word": message.text})
 
-        results_list = list(results)  # Convert the cursor to a list
+        # Convert cursor to a list
+        results_list = list(results)  # Ensure that `results` is converted correctly to a list
+
         if results_list:
             # Randomize the response from the results
             result = random.choice(results_list)
@@ -104,4 +118,3 @@ if __name__ == "__main__":
 
     # Run the bot in the main thread
     run_bot()
-    
