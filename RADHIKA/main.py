@@ -65,8 +65,9 @@ async def vickai(client: Client, message: Message):
             # Fetch all matching results for the word
             results = chatai.find({"word": message.text})
 
-            # Convert cursor to a list
-            results_list = list(results)  # Ensure that `results` is converted correctly to a list
+            # Ensure that `results` is converted correctly to a list
+            # Instead of using `list()`, use a list comprehension
+            results_list = [result for result in results]
 
             if results_list:
                 # Randomize the response from the results
@@ -85,8 +86,9 @@ async def vickprivate(client: Client, message: Message):
         # Fetch all matching results for the word
         results = chatai.find({"word": message.text})
 
-        # Convert cursor to a list
-        results_list = list(results)  # Ensure that `results` is converted correctly to a list
+        # Ensure that `results` is converted correctly to a list
+        # Instead of using `list()`, use a list comprehension
+        results_list = [result for result in results]
 
         if results_list:
             # Randomize the response from the results
@@ -118,3 +120,4 @@ if __name__ == "__main__":
 
     # Run the bot in the main thread
     run_bot()
+    
