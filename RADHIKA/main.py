@@ -11,7 +11,10 @@ from pyrogram.enums import ChatAction
 from pymongo import MongoClient
 from flask import Flask
 
-# Environment variables
+# Set up logging for debugging
+logging.basicConfig(level=logging.DEBUG)
+
+# Environment variables (ensure these are set correctly)
 API_ID = os.environ.get("API_ID", "16457832")
 API_HASH = os.environ.get("API_HASH", "3030874d0befdb5d05597deacc3e83ab")
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "7383809543:AAE1JNivQ81ZMoP7aC_FRDpRKByjahmBDTI")
@@ -19,7 +22,14 @@ MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://TEAMBABY01:UTTAMRATHORE09
 OWNER_ID = 7400383704  # Hardcoded OWNER_ID
 
 # MongoDB connection
-client = MongoClient(MONGO_URL, connectTimeoutMS=30000, serverSelectionTimeoutMS=30000)
+try:
+    client = MongoClient(MONGO_URL, connectTimeoutMS=30000, serverSelectionTimeoutMS=30000)
+    client.server_info()  # Check if connection is successful
+    logging.info("MongoDB connection successful!")
+except Exception as e:
+    logging.error(f"MongoDB connection error: {e}")
+    exit()
+
 db = client["Word"]
 chatai = db["WordDb"]
 clonebotdb = db["CloneBotDb"]
@@ -184,25 +194,25 @@ def keep_alive():
         try:
             requests.get("https://radhika-0xf7.onrender.com")
         except Exception as e:
-            print(f"Ping error: {e}")
+            logging.error(f"Ping error: {e}")
         time.sleep(300)  # Send ping every 5 minutes
 
 # Run bot
 def run_bot():
-    print(f"{BOT_NAME} ɪs ᴀʟɪᴠᴇ!")
-    RADHIKA.run()
+    try:
+        logging.info(f"{BOT_NAME} is starting...")
+        RADHIKA.run()
+    except Exception as e:
+        logging.error(f"Error starting the bot: {e}")
 
 if __name__ == "__main__":
     # Flask server in a separate thread
-    flask_thread = threading.Thread(target=run_flask)
-    flask_thread.daemon = True
-    flask_thread.start()
+    # flask_thread = threading.Thread(target=run_flask)
+    # flask_thread.daemon = True
+    # flask_thread.start()
 
     # Keep-alive function in a separate thread
-    keep_alive_thread = threading.Thread(target=keep_alive)
-    keep_alive_thread.daemon = True
-    keep_alive_thread.start()
-
-    # Run the bot
-    run_bot()
+    # keep_alive_thread = threading.Thread(target=keep_alive)
+    # keep_alive_thread.daemon = True
+    # keep
     
