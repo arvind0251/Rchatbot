@@ -39,35 +39,14 @@ RADHIKA = Client(
     bot_token=BOT_TOKEN
 )
 
-# Function to clone and run a bot
-async def run_cloned_bot(bot_token):
-    try:
-        # Initialize the cloned bot client
-        ai = Client(bot_token, API_ID, API_HASH, bot_token=bot_token)
-        await ai.start()  # Start the bot
-        logging.info(f"Cloned bot with token {bot_token} started successfully.")
-        
-        # Set bot commands for the cloned bot
-        await ai.set_bot_commands([
-            BotCommand("start", "Start the bot"),
-            BotCommand("help", "Get the help menu"),
-            BotCommand("stats", "Get bot stats"),
-        ])
-        
-        # Keep the cloned bot running
-        await ai.idle()
-
-    except Exception as e:
-        logging.error(f"Error while cloning and running bot with token {bot_token}: {e}")
-
 # Define the anony_boot function to start the main bot
 async def anony_boot():
     try:
-        # Start the main bot
+        # Start the bot
         await RADHIKA.start()
         logging.info(f"Bot @{RADHIKA.me.username} started successfully.")
         
-        # Set bot commands for the main bot
+        # Set bot commands
         await RADHIKA.set_bot_commands([
             BotCommand("start", "Start the bot"),
             BotCommand("help", "Get the help menu"),
@@ -106,16 +85,10 @@ async def clone_txt(client, message: Message):
         mi = await message.reply_text("Please wait while I check the bot token.")
         
         try:
-            # Check if bot token already exists in the database
-            existing_bot = await clonebotdb.find_one({"token": bot_token})
-            if existing_bot:
-                await mi.edit_text(f"**Bot @{existing_bot['username']} is already cloned.**")
-                return
-
             # Initialize the cloned bot client
             ai = Client(bot_token, API_ID, API_HASH, bot_token=bot_token)
             await ai.start()  # Start the bot
-            
+
             # Get bot details
             bot = await ai.get_me()
             bot_id = bot.id
@@ -130,16 +103,12 @@ async def clone_txt(client, message: Message):
                 "username": bot.username,
             }
 
-            # Insert the details into MongoDB
+            # Insert the details into MongoDB (with await to ensure completion)
             await clonebotdb.insert_one(details)  # MongoDB insert with await
 
             # Respond to the user
             await mi.edit_text(f"**Bot @{bot.username} has been successfully cloned ✅.**")
             logging.info(f"Cloned bot @{bot.username} started successfully.")
-            
-            # Now run the cloned bot in the background
-            asyncio.create_task(run_cloned_bot(bot_token))
-
         except Exception as e:
             logging.error(f"Error while cloning bot: {e}")
             await mi.edit_text(f"⚠️ Error: {e}")
@@ -193,13 +162,59 @@ async def delete_cloned_bot(client, message: Message):
         await message.reply_text(f"**An error occurred while deleting the cloned bot:** {e}")
         logging.exception(e)
 
+# Delete all cloned bots: /delallclone command
+@RADHIKA.on_message(filters.command("delallclone") & filters.user(OWNER_ID))
+async def delete_all_cloned_bots(client, message: Message):
+    try:
+        a = await message.reply_text("**Deleting all cloned bots...**")
+        await clonebotdb.delete_many({})
+        await a.edit_text("**All cloned bots have been deleted successfully ✅**")
+    except Exception as e:
+        await a.edit_text(f"**An error occurred while deleting all cloned bots.** {e}")
+        logging.exception(e)
+
+# Non-private chats handler (both text and stickers)
+@RADHIKA.on_message(
+    (filters.text | filters.sticker) & filters.private & ~filters.bot
+)
+async def vickprivate(client: Client, message: Message):
+    chatdb = MongoClient(MONGO_URL)
+    chatai = chatdb["Word"]["WordDb"]
+    if not message.reply_to_message: 
+        await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
+        K = []  
+        is_chat = chatai.find({"word": message.text})                 
+        for x in is_chat:
+            K.append(x['text'])
+        hey = random.choice(K)
+        is_text = chatai.find_one({"text": hey})
+        Yo = is_text['check']
+        if Yo == "sticker":
+            await message.reply_sticker(f"{hey}")
+        if not Yo == "sticker":
+            await message.reply_text(f"{hey}")
+    if message.reply_to_message:            
+        getme = await RADHIKA.get_me()
+        bot_id = getme.id       
+        if message.reply_to_message.from_user.id == bot_id:                    
+            await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
+            K = []  
+            is_chat = chatai.find({"word": message.text})                 
+            for x in is_chat:
+                K.append(x['text'])
+            hey = random.choice(K)
+            is_text = chatai.find_one({"text": hey})
+            Yo = is_text['check']
+            if Yo == "sticker":
+                await message.reply_sticker(f"{hey}")
+            if not Yo == "sticker":
+                await message.reply_text(f"{hey}")
+
 # Main entry point to run the bot
 if __name__ == "__main__":
     try:
-        logging.info("Starting main bot...")
-        # Start the main bot
-        asyncio.run(anony_boot())
-        
+        logging.info("Starting bot...")
+        asyncio.get_event_loop().create_task(anony_boot())  # Use create_task instead of run
+        asyncio.get_event_loop().run_forever()  # Keep the event loop running
     except Exception as e:
         logging.error(f"Failed to start the bot: {e}")
-        
