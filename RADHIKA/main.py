@@ -2,17 +2,18 @@ import logging
 import os
 import asyncio
 from pyrogram import Client, filters
-from pyrogram.types import BotCommand, Message
+from pyrogram.types import BotCommand, Message, InlineKeyboardButton, InlineKeyboardMarkup
 from pymongo import MongoClient
+import random
 
-# Set up logging for simple output (Only info level)
+# Set up logging for simple output
 logging.basicConfig(level=logging.INFO)
 
-# Environment variables (ensure these are set correctly)
+# Environment variables
 API_ID = os.environ.get("API_ID", "16457832")
 API_HASH = os.environ.get("API_HASH", "3030874d0befdb5d05597deacc3e83ab")
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "7383809543:AAGaHCQb8b9C7-cB1fU5tlm3vrUFa8nj_wM")
-MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://teamdaxx123:teamdaxx123@cluster0.ysbpgcp.mongodb.net/?retryWrites=true&w=majority")
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "7383809543:AAE1JNivQ81ZMoP7aC_FRDpRKByjahmBDTI")
+MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://your-mongo-url")
 
 # MongoDB connection
 try:
@@ -36,17 +37,19 @@ RADHIKA = Client(
     bot_token=BOT_TOKEN
 )
 
-# Define the anony_boot function that starts the bot and sets up the commands.
+# Define the anony_boot function
 async def anony_boot():
     try:
         # Start the bot
         await RADHIKA.start()
         logging.info(f"Bot @{RADHIKA.me.username} started successfully.")
         
-        # Set bot commands (Simple version with just basic commands)
+        # Set bot commands
         await RADHIKA.set_bot_commands([
             BotCommand("start", "Start the bot"),
             BotCommand("help", "Get the help menu"),
+            BotCommand("clone", "Clone a bot"),
+            BotCommand("stats", "Get bot stats"),
         ])
         logging.info("Bot commands set successfully.")
         
@@ -55,21 +58,27 @@ async def anony_boot():
         return
 
     # Keep the bot running
-    await RADHIKA.idle()
+    await RADHIKA.run()  # Use run instead of idle()
 
 # Command handler for /start
 @RADHIKA.on_message(filters.command("start") & filters.private)
 async def start(client: Client, message: Message):
-    # Send a simple reply for /start command
-    await message.reply("Hii, I am Radhika Baby, How are you?")
+    keyboard = [
+        [
+            InlineKeyboardButton("Join 🤒", url="https://t.me/BABY09_WORLD")
+        ]
+    ]
+    await message.reply(
+        "Hii, I am Radhika Baby, How are you?",
+        reply_markup=InlineKeyboardMarkup(keyboard)
+    )
 
 # Command handler for /help
 @RADHIKA.on_message(filters.command("help") & filters.private)
 async def help(client: Client, message: Message):
-    # Send a simple help message
     await message.reply("This is a bot that does X, Y, and Z.\nUse /start to begin!")
 
-# Clone Bot Logic: /clone command
+# Clone Bot Logic
 @RADHIKA.on_message(filters.command(["clone", "host", "deploy"]))
 async def clone_txt(client, message: Message):
     if len(message.command) > 1:
@@ -91,7 +100,6 @@ async def clone_txt(client, message: Message):
                 "token": bot_token,
                 "username": bot.username,
             }
-            # Insert clone details in the DB
             await clonebotdb.insert_one(details)
             await mi.edit_text(f"**Bot @{bot.username} has been successfully cloned ✅.**")
         except Exception as e:
@@ -104,14 +112,13 @@ async def clone_txt(client, message: Message):
 @RADHIKA.on_message(filters.command("cloned"))
 async def list_cloned_bots(client, message: Message):
     try:
-        cloned_bots = clonebotdb.find()
-        cloned_bots_list = await cloned_bots.to_list(length=None)
-        if not cloned_bots_list:
+        cloned_bots = await clonebotdb.find().to_list(length=None)
+        if not cloned_bots:
             await message.reply_text("No bots have been cloned yet.")
             return
-        total_clones = len(cloned_bots_list)
+        total_clones = len(cloned_bots)
         text = f"**Total Cloned Bots:** {total_clones}\n\n"
-        for bot in cloned_bots_list:
+        for bot in cloned_bots:
             text += f"**Bot ID:** `{bot['bot_id']}`\n"
             text += f"**Bot Name:** {bot['name']}\n"
             text += f"**Bot Username:** @{bot['username']}\n\n"
@@ -144,13 +151,9 @@ async def delete_cloned_bot(client, message: Message):
         logging.exception(e)
 
 # Delete all cloned bots: /delallclone command
-@RADHIKA.on_message(filters.command("delallclone"))
+@RADHIKA.on_message(filters.command("delallclone") & filters.user(OWNER_ID))
 async def delete_all_cloned_bots(client, message: Message):
     try:
-        if message.from_user.id != OWNER_ID:
-            await message.reply_text("**You don't have permission to delete all cloned bots.**")
-            return
-
         a = await message.reply_text("**Deleting all cloned bots...**")
         await clonebotdb.delete_many({})
         await a.edit_text("**All cloned bots have been deleted successfully ✅**")
