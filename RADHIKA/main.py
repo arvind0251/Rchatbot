@@ -85,12 +85,13 @@ async def clone_txt(client, message: Message):
         mi = await message.reply_text("Please wait while I check the bot token.")
         
         try:
-            # Initialize the cloned bot client
-            ai = Client(bot_token, API_ID, API_HASH, bot_token=bot_token)
-            
-            # Start the cloned bot asynchronously without blocking the event loop
-            asyncio.create_task(ai.start())  # Use create_task to avoid blocking the event loop
-            
+            # Create a unique session name for each cloned bot
+            session_name = f"clone_{bot_token}"
+            ai = Client(session_name, API_ID, API_HASH, bot_token=bot_token)
+
+            # Start the cloned bot
+            await ai.start()
+
             # Get bot details
             bot = await ai.get_me()
             bot_id = bot.id
@@ -105,18 +106,28 @@ async def clone_txt(client, message: Message):
                 "username": bot.username,
             }
 
-            # Insert the details into MongoDB (no await needed here)
-            clonebotdb.insert_one(details)  # MongoDB insert without await
+            # Insert the details into MongoDB
+            await clonebotdb.insert_one(details)
 
             # Respond to the user
             await mi.edit_text(f"**Bot @{bot.username} has been successfully cloned ✅.**")
             logging.info(f"Cloned bot @{bot.username} started successfully.")
+            
+            # Run the cloned bot in a separate asyncio task
+            asyncio.create_task(run_cloned_bot(ai))
 
         except Exception as e:
             logging.error(f"Error while cloning bot: {e}")
             await mi.edit_text(f"⚠️ Error: {e}")
     else:
         await message.reply_text("**Provide Bot Token after /clone Command from @Botfather.**")
+
+async def run_cloned_bot(ai: Client):
+    try:
+        # Run the cloned bot until it's stopped
+        await ai.idle()  # This is crucial for keeping the cloned bot alive and listening for messages
+    except Exception as e:
+        logging.error(f"Error while keeping cloned bot alive: {e}")
 
 # List cloned bots: /cloned command
 @RADHIKA.on_message(filters.command("cloned"))
@@ -147,11 +158,6 @@ async def delete_cloned_bot(client, message: Message):
 
         bot_token = " ".join(message.command[1:])
         ok = await message.reply_text("**Checking the bot token...**")
-
-        # Check if clonebotdb is properly initialized
-        if clonebotdb is None:
-            await message.reply_text("**Error: Database connection or collection is not initialized.**")
-            return
 
         # Query the database for the cloned bot
         cloned_bot = await clonebotdb.find_one({"token": bot_token})
@@ -192,37 +198,37 @@ async def delete_all_cloned_bots(client, message: Message):
 )
 async def vickprivate(client: Client, message: Message):
 
-   chatdb = MongoClient(MONGO_URL)
-   chatai = chatdb["Word"]["WordDb"]
-   if not message.reply_to_message: 
-       await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
-       K = []  
-       is_chat = chatai.find({"word": message.text})                 
-       for x in is_chat:
-           K.append(x['text'])
-       hey = random.choice(K)
-       is_text = chatai.find_one({"text": hey})
-       Yo = is_text['check']
-       if Yo == "sticker":
-           await message.reply_sticker(f"{hey}")
-       if not Yo == "sticker":
-           await message.reply_text(f"{hey}")
-   if message.reply_to_message:            
-       getme = await RADHIKA.get_me()
-       bot_id = getme.id       
-       if message.reply_to_message.from_user.id == bot_id:                    
-           await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
-           K = []  
-           is_chat = chatai.find({"word": message.text})                 
-           for x in is_chat:
-               K.append(x['text'])
-           hey = random.choice(K)
-           is_text = chatai.find_one({"text": hey})
-           Yo = is_text['check']
-           if Yo == "sticker":
-               await message.reply_sticker(f"{hey}")
-           if not Yo == "sticker":
-               await message.reply_text(f"{hey}")
+    chatdb = MongoClient(MONGO_URL)
+    chatai = chatdb["Word"]["WordDb"]
+    if not message.reply_to_message: 
+        await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
+        K = []  
+        is_chat = chatai.find({"word": message.text})                 
+        for x in is_chat:
+            K.append(x['text'])
+        hey = random.choice(K)
+        is_text = chatai.find_one({"text": hey})
+        Yo = is_text['check']
+        if Yo == "sticker":
+            await message.reply_sticker(f"{hey}")
+        if not Yo == "sticker":
+            await message.reply_text(f"{hey}")
+    if message.reply_to_message:            
+        getme = await RADHIKA.get_me()
+        bot_id = getme.id       
+        if message.reply_to_message.from_user.id == bot_id:                    
+            await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
+            K = []  
+            is_chat = chatai.find({"word": message.text})                 
+            for x in is_chat:
+                K.append(x['text'])
+            hey = random.choice(K)
+            is_text = chatai.find_one({"text": hey})
+            Yo = is_text['check']
+            if Yo == "sticker":
+                await message.reply_sticker(f"{hey}")
+            if not Yo == "sticker":
+                await message.reply_text(f"{hey}")
 
 # Private chats handler (both text and stickers)
 @RADHIKA.on_message((filters.text | filters.sticker) & filters.private & ~filters.bot)
@@ -249,3 +255,4 @@ if __name__ == "__main__":
         asyncio.get_event_loop().run_forever()  # Keep the event loop running
     except Exception as e:
         logging.error(f"Failed to start the bot: {e}")
+        
