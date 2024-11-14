@@ -15,6 +15,7 @@ API_HASH = os.environ.get("API_HASH", "3030874d0befdb5d05597deacc3e83ab")
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "7383809543:AAE1JNivQ81ZMoP7aC_FRDpRKByjahmBDTI")
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://teamdaxx123:teamdaxx123@cluster0.ysbpgcp.mongodb.net/?retryWrites=true&w=majority")
 OWNER_ID = "7400383704"
+
 # MongoDB connection
 try:
     client = MongoClient(MONGO_URL, connectTimeoutMS=30000, serverSelectionTimeoutMS=30000)
@@ -56,9 +57,6 @@ async def anony_boot():
     except Exception as ex:
         logging.error(f"Error during bot startup: {ex}")
         return
-
-    # Keep the bot running
-    await RADHIKA.run()  # Use run instead of idle()
 
 # Command handler for /start
 @RADHIKA.on_message(filters.command("start") & filters.private)
@@ -201,6 +199,8 @@ async def vickprivate(client: Client, message: Message):
 if __name__ == "__main__":
     try:
         logging.info("Starting bot...")
-        asyncio.run(anony_boot())  # Run the bot asynchronously
+        asyncio.get_event_loop().create_task(anony_boot())  # Use create_task instead of run
+        asyncio.get_event_loop().run_forever()  # Keep the event loop running
     except Exception as e:
         logging.error(f"Failed to start the bot: {e}")
+    
