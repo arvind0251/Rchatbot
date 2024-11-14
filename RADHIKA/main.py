@@ -1,7 +1,7 @@
 import logging
 import os
 import asyncio
-from pyrogram import Client, filters
+from pyrogram import Client, filters, ChatAction
 from pyrogram.types import BotCommand, Message, InlineKeyboardButton, InlineKeyboardMarkup
 from pymongo import MongoClient
 import random
@@ -186,8 +186,8 @@ async def vickai(client: Client, message: Message):
         is_vick = vick.find_one({"chat_id": message.chat.id})
 
         if not is_vick:
-            # Use the string "typing" directly for older versions (as per the error fix)
-            await RADHIKA.send_chat_action(message.chat.id, "typing")
+            # Use the correct ChatAction enum
+            await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
 
             results = chatai.find({"word": message.text})
             results_list = [result for result in results]
@@ -203,8 +203,8 @@ async def vickai(client: Client, message: Message):
 @RADHIKA.on_message((filters.text | filters.sticker) & filters.private & ~filters.bot)
 async def vickprivate(client: Client, message: Message):
     if not message.reply_to_message:
-        # Use the string "typing" directly for older versions (as per the error fix)
-        await RADHIKA.send_chat_action(message.chat.id, "typing")
+        # Use the correct ChatAction enum
+        await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
 
         results = chatai.find({"word": message.text})
         results_list = [result for result in results]
