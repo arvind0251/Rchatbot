@@ -2,7 +2,7 @@ import logging
 import os
 import asyncio
 from pyrogram import Client, filters
-from pyrogram.types import BotCommand, Message, InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.types import BotCommand, Message, InlineKeyboardButton, InlineKeyboardMarkup, ChatAction
 from pymongo import MongoClient
 import random
 
@@ -170,8 +170,8 @@ async def vickai(client: Client, message: Message):
         is_vick = vick.find_one({"chat_id": message.chat.id})
 
         if not is_vick:
-            # Send 'typing' action correctly to avoid the error
-            await RADHIKA.send_chat_action(message.chat.id, "typing")
+            # Corrected: Use ChatAction enum instead of a string
+            await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
 
             results = chatai.find({"word": message.text})
             results_list = [result for result in results]
@@ -187,8 +187,8 @@ async def vickai(client: Client, message: Message):
 @RADHIKA.on_message((filters.text | filters.sticker) & filters.private & ~filters.bot)
 async def vickprivate(client: Client, message: Message):
     if not message.reply_to_message:
-        # Send 'typing' action correctly to avoid the error
-        await RADHIKA.send_chat_action(message.chat.id, "typing")
+        # Corrected: Use ChatAction enum instead of a string
+        await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
 
         results = chatai.find({"word": message.text})
         results_list = [result for result in results]
@@ -208,4 +208,4 @@ if __name__ == "__main__":
         asyncio.get_event_loop().run_forever()  # Keep the event loop running
     except Exception as e:
         logging.error(f"Failed to start the bot: {e}")
-
+        
