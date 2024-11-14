@@ -44,6 +44,29 @@ RADHIKA = Client(
     bot_token=BOT_TOKEN
 )
 
+# Define the anony_boot function that starts the bot and sets up the commands.
+async def anony_boot():
+    try:
+        # Start the bot
+        await RADHIKA.start()
+        logging.info(f"Bot @{RADHIKA.username} started.")
+        
+        # Add any other necessary bot initialization or module imports here
+        # For example, setting bot commands
+        await RADHIKA.set_bot_commands([
+            BotCommand("start", "Start the bot"),
+            BotCommand("help", "Get the help menu"),
+            BotCommand("clone", "Clone a bot"),
+            BotCommand("stats", "Get bot stats"),
+        ])
+        logging.info("Bot commands set successfully.")
+
+    except Exception as ex:
+        logging.error(f"Error during bot startup: {ex}")
+    
+    # Start the idle loop to keep the bot running
+    await RADHIKA.idle()
+
 # Command handler for /start
 @RADHIKA.on_message(filters.command("start") & filters.private)
 async def start(client: Client, message: Message):
@@ -178,6 +201,7 @@ async def vickprivate(client: Client, message: Message):
             else:
                 await message.reply_text(result['text'])
 
+# Flask Server Code for Health Check
 app = Flask(__name__)
 
 @app.route('/')
@@ -194,4 +218,5 @@ if __name__ == "__main__":
 
     # Start the bot asynchronously
     asyncio.get_event_loop().run_until_complete(anony_boot())
-    LOGGER.info("Stopping nexichat Bot...")
+    logging.info("Bot has been stopped.")
+    
