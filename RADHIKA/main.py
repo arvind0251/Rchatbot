@@ -146,7 +146,7 @@ async def delete_cloned_bot(client, message: Message):
         ok = await message.reply_text("**Checking the bot token...**")
 
         # Check if clonebotdb is properly initialized
-        if not clonebotdb:
+        if clonebotdb is None:
             await message.reply_text("**Error: Database connection or collection is not initialized.**")
             return
 
@@ -220,7 +220,8 @@ async def vickprivate(client: Client, message: Message):
 if __name__ == "__main__":
     try:
         logging.info("Starting bot...")
-        asyncio.get_event_loop().create_task(anony_boot())  # Use create_task instead of run
+        asyncio.get_event_loop().create_task(anon
+y_boot())  # Use create_task instead of run
         asyncio.get_event_loop().run_forever()  # Keep the event loop running
     except Exception as e:
         logging.error(f"Failed to start the bot: {e}")
