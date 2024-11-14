@@ -214,5 +214,8 @@ if __name__ == "__main__":
     # Keep-alive function in a separate thread
     # keep_alive_thread = threading.Thread(target=keep_alive)
     # keep_alive_thread.daemon = True
-    # keep
+    # keep_alive_thread.start()
+
+    # Run the bot
+    run_bot()
     
