@@ -104,9 +104,9 @@ async def clone_txt(client, message: Message):
             async def help_clone(client: Client, message: Message):
                 await message.reply("This is a cloned bot with the same functionality as the main bot.")
 
-            # Start the cloned bot
-            await ai.start()  # Start the cloned bot
-            
+            # Start the cloned bot using run() instead of start()
+            await ai.run()  # This keeps the cloned bot running in the same event loop
+
             # Get bot details
             bot = await ai.get_me()
             bot_id = bot.id
@@ -127,9 +127,6 @@ async def clone_txt(client, message: Message):
             # Respond to the user
             await mi.edit_text(f"**Bot @{bot.username} has been successfully cloned ✅.**")
             logging.info(f"Cloned bot @{bot.username} started successfully.")
-
-            # Keep the cloned bot running using run() to prevent the "event loop already running" error
-            await ai.run()  # This will keep the cloned bot active
 
         except Exception as e:
             logging.error(f"Error while cloning bot: {e}")
@@ -166,6 +163,11 @@ async def delete_cloned_bot(client, message: Message):
 
         bot_token = " ".join(message.command[1:])
         ok = await message.reply_text("**Checking the bot token...**")
+
+        # Check if clonebotdb is properly initialized
+        if clonebotdb is None:
+            await message.reply_text("**Error: Database connection or collection is not initialized.**")
+            return
 
         # Query the database for the cloned bot
         cloned_bot = await clonebotdb.find_one({"token": bot_token})
@@ -214,69 +216,14 @@ async def vickprivate(client: Client, message: Message):
         is_chat = chatai.find({"word": message.text})                 
         for x in is_chat:
             K.append(x['text'])
-        hey = random.choice(K)
-        is_text = chatai.find_one({"text": hey})
-        Yo = is_text['check']
-        if Yo == "sticker":
-            await message.reply_sticker(f"{hey}")
-        if not Yo == "sticker":
-            await message.reply_text(f"{hey}")
-    if message.reply_to_message:            
-        getme = await RADHIKA.get_me()
-        bot_id = getme.id       
-        if message.reply_to_message.from_user.id == bot_id:                    
-            await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
-            K = []  
-            is_chat = chatai.find({"word": message.text})                 
-            for x in is_chat:
-                K.append(x['text'])
-            hey = random.choice(K)
-            is_text = chatai.find_one({"text": hey})
-            Yo = is_text['check']
-            if Yo == "sticker":
-                await message.reply_sticker(f"{hey}")
-            if not Yo == "sticker":
-                await message.reply_text(f"{hey}")
+        if K:
+            await message.reply(random.choice(K))
 
-# Private chats handler (both text and stickers)
-@RADHIKA.on_message((filters.text | filters.sticker) & filters.private & ~filters.bot)
-async def vickprivate(client: Client, message: Message):
-    if not message.reply_to_message:
-        # Use the string "typing" for compatibility with older versions
-        await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
+# Start the main bot
+async def main():
+    await anony_boot()
 
-        results = chatai.find({"word": message.text})
-        results_list = [result for result in results]
-
-        if results_list:
-            result = random.choice(results_list)
-            if result.get('check') == "sticker":
-                await message.reply_sticker(result['text'])
-            else:
-                await message.reply_text(result['text'])
-
-# Group chat handler (both text and stickers)
-@RADHIKA.on_message((filters.text | filters.sticker) & filters.group & ~filters.bot)
-async def vickgroup(client: Client, message: Message):
-    if not message.reply_to_message:
-        await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
-
-        results = chatai.find({"word": message.text})
-        results_list = [result for result in results]
-
-        if results_list:
-            result = random.choice(results_list)
-            if result.get('check') == "sticker":
-                await message.reply_sticker(result['text'])
-            else:
-                await message.reply_text(result['text'])
-
-# Main entry point to run the bot
+# Running the event loop
 if __name__ == "__main__":
-    try:
-        logging.info("Starting bot...")
-        asyncio.get_event_loop().create_task(anony_boot())  # Use create_task instead of run
-        asyncio.get_event_loop().run_forever()  # Keep the event loop running
-    except Exception as e:
-        logging.error(f"Failed to start the bot: {e}")
-        
+    asyncio.run(main())
+            
