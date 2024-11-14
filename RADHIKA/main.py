@@ -207,7 +207,6 @@ async def delete_all_cloned_bots(client, message: Message):
     & ~filters.bot,
 )
 async def vickprivate(client: Client, message: Message):
-
     chatdb = MongoClient(MONGO_URL)
     chatai = chatdb["Word"]["WordDb"]
     if not message.reply_to_message:
@@ -216,35 +215,36 @@ async def vickprivate(client: Client, message: Message):
         is_chat = chatai.find({"word": message.text})                 
         for x in is_chat:
             K.append(x['text'])
-        if K:
-            await message.reply(random.choice(K))
+        hey = random.choice(K)
+        is_text = chatai.find_one({"text": hey})
+        Yo = is_text['check']
+        if Yo == "sticker":
+            await message.reply_sticker(f"{hey}")
+        if not Yo == "sticker":
+            await message.reply_text(f"{hey}")
+    if message.reply_to_message:            
+        getme = await RADHIKA.get_me()
+        bot_id = getme.id       
+        if message.reply_to_message.from_user.id == bot_id:                    
+            await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
+            K = []  
+            is_chat = chatai.find({"word": message.text})                 
+            for x in is_chat:
+                K.append(x['text'])
+            hey = random.choice(K)
+            is_text = chatai.find_one({"text": hey})
+            Yo = is_text['check']
+            if Yo == "sticker":
+                await message.reply_sticker(f"{hey}")
+            if not Yo == "sticker":
+                await message.reply_text(f"{hey}")
 
-# Group chat handler (both text and stickers)
-@RADHIKA.on_message(
-    (
-        filters.text
-        | filters.sticker
-    )
-    & filters.group
-    & ~filters.bot,
-)
-async def vickgroup(client: Client, message: Message):
-    chatdb = MongoClient(MONGO_URL)
-    chatai = chatdb["Word"]["WordDb"]
-    if not message.reply_to_message:
-        await RADHIKA.send_chat_action(message.chat.id, "typing")
-        K = []  
-        is_chat = chatai.find({"word": message.text})                 
-        for x in is_chat:
-            K.append(x['text'])
-        if K:
-            await message.reply(random.choice(K))
-
-# Start the main bot
-async def main():
-    await anony_boot()
-
-# Running the event loop
+# Main entry point to run the bot
 if __name__ == "__main__":
-    asyncio.run(main())
-    
+    try:
+        logging.info("Starting bot...")
+        asyncio.get_event_loop().create_task(anony_boot())  # Use create_task instead of run
+        asyncio.get_event_loop().run_forever()  # Keep the event loop running
+    except Exception as e:
+        logging.error(f"Failed to start the bot: {e}")
+        
