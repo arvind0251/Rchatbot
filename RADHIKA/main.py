@@ -87,7 +87,9 @@ async def clone_txt(client, message: Message):
         try:
             # Initialize the cloned bot client
             ai = Client(bot_token, API_ID, API_HASH, bot_token=bot_token)
-            await ai.start()  # Start the cloned bot
+            
+            # Start the cloned bot asynchronously without blocking the event loop
+            asyncio.create_task(ai.start())  # Use create_task to avoid blocking the event loop
             
             # Get bot details
             bot = await ai.get_me()
@@ -109,9 +111,6 @@ async def clone_txt(client, message: Message):
             # Respond to the user
             await mi.edit_text(f"**Bot @{bot.username} has been successfully cloned ✅.**")
             logging.info(f"Cloned bot @{bot.username} started successfully.")
-
-            # Keep the cloned bot running by using run()
-            await ai.run()
 
         except Exception as e:
             logging.error(f"Error while cloning bot: {e}")
@@ -250,4 +249,3 @@ if __name__ == "__main__":
         asyncio.get_event_loop().run_forever()  # Keep the event loop running
     except Exception as e:
         logging.error(f"Failed to start the bot: {e}")
-        
