@@ -128,8 +128,8 @@ async def clone_txt(client, message: Message):
             await mi.edit_text(f"**Bot @{bot.username} has been successfully cloned ✅.**")
             logging.info(f"Cloned bot @{bot.username} started successfully.")
 
-            # Keep the cloned bot running (use idle instead of run to avoid event loop conflict)
-            await ai.idle()  # This will keep the bot running and allow it to process messages
+            # Keep the cloned bot running
+            await ai.run()  # Use `run()` to keep the cloned bot active
             
         except Exception as e:
             logging.error(f"Error while cloning bot: {e}")
@@ -205,6 +205,23 @@ async def delete_all_cloned_bots(client, message: Message):
 async def vickprivate(client: Client, message: Message):
     if not message.reply_to_message:
         await RADHIKA.send_chat_action(message.chat.id, "typing")
+
+        results = chatai.find({"word": message.text})
+        results_list = [result for result in results]
+
+        if results_list:
+            result = random.choice(results_list)
+            if result.get('check') == "sticker":
+                await message.reply_sticker(result['text'])
+            else:
+                await message.reply_text(result['text'])
+
+# Group chat handler (both text and stickers)
+@RADHIKA.on_message((filters.text | filters.sticker) & filters.group & ~filters.bot)
+async def vickgroup(client: Client, message: Message):
+    if not message.reply_to_message:
+        await RADHIKA.send_chat_action(message.chat.id, "typing")
+
         results = chatai.find({"word": message.text})
         results_list = [result for result in results]
 
