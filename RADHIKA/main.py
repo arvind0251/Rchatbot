@@ -3,7 +3,7 @@ import os
 import asyncio
 from pyrogram import Client, filters
 from pyrogram.types import BotCommand, Message, InlineKeyboardButton, InlineKeyboardMarkup
-from pymongo import MongoClient
+from motor.motor_asyncio import AsyncIOMotorClient  # Using motor for async MongoDB
 import random
 
 # Set up logging for simple output
@@ -16,19 +16,16 @@ BOT_TOKEN = os.environ.get("BOT_TOKEN", "7383809543:AAE1JNivQ81ZMoP7aC_FRDpRKByj
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://teamdaxx123:teamdaxx123@cluster0.ysbpgcp.mongodb.net/?retryWrites=true&w=majority")
 OWNER_ID = "7400383704"
 
-# MongoDB connection
+# MongoDB connection using motor (async)
 try:
-    client = MongoClient(MONGO_URL, connectTimeoutMS=30000, serverSelectionTimeoutMS=30000)
-    client.server_info()  # Check if connection is successful
+    client = AsyncIOMotorClient(MONGO_URL, connectTimeoutMS=30000, serverSelectionTimeoutMS=30000)
+    db = client["Word"]
+    chatai = db["WordDb"]
+    clonebotdb = db["CloneBotDb"]
     logging.info("MongoDB connection successful!")
 except Exception as e:
     logging.error(f"MongoDB connection error: {e}")
     exit()
-
-# Initialize MongoDB collections
-db = client["Word"]
-chatai = db["WordDb"]
-clonebotdb = db["CloneBotDb"]
 
 # Initialize the bot client
 RADHIKA = Client(
@@ -99,8 +96,8 @@ async def clone_txt(client, message: Message):
                 "username": bot.username,
             }
 
-            # Insert the details synchronously without using 'await'
-            clonebotdb.insert_one(details)  # No 'await' here
+            # Insert the details asynchronously
+            await clonebotdb.insert_one(details)
 
             await mi.edit_text(f"**Bot @{bot.username} has been successfully cloned ✅.**")
         except Exception as e:
@@ -167,17 +164,14 @@ async def delete_all_cloned_bots(client, message: Message):
 async def vickai(client: Client, message: Message):
     if not message.reply_to_message:
         vick = db["VickDb"]["Vick"]
-        is_vick = vick.find_one({"chat_id": message.chat.id})
+        is_vick = await vick.find_one({"chat_id": message.chat.id})
 
         if not is_vick:
-            # Use the string "typing" directly for older versions (as per the error fix)
             await RADHIKA.send_chat_action(message.chat.id, "typing")
 
-            results = chatai.find({"word": message.text})
-            results_list = [result for result in results]
-
-            if results_list:
-                result = random.choice(results_list)
+            results = await chatai.find({"word": message.text}).to_list(length=None)
+            if results:
+                result = random.choice(results)
                 if result.get('check') == "sticker":
                     await message.reply_sticker(result['text'])
                 else:
@@ -187,14 +181,11 @@ async def vickai(client: Client, message: Message):
 @RADHIKA.on_message((filters.text | filters.sticker) & filters.private & ~filters.bot)
 async def vickprivate(client: Client, message: Message):
     if not message.reply_to_message:
-        # Use the string "typing" directly for older versions (as per the error fix)
         await RADHIKA.send_chat_action(message.chat.id, "typing")
 
-        results = chatai.find({"word": message.text})
-        results_list = [result for result in results]
-
-        if results_list:
-            result = random.choice(results_list)
+        results = await chatai.find({"word": message.text}).to_list(length=None)
+        if results:
+            result = random.choice(results)
             if result.get('check') == "sticker":
                 await message.reply_sticker(result['text'])
             else:
@@ -204,8 +195,6 @@ async def vickprivate(client: Client, message: Message):
 if __name__ == "__main__":
     try:
         logging.info("Starting bot...")
-        asyncio.get_event_loop().create_task(anony_boot())  # Use create_task instead of run
-        asyncio.get_event_loop().run_forever()  # Keep the event loop running
+        asyncio.run(anony_boot())  # Using asyncio.run() to start the bot
     except Exception as e:
         logging.error(f"Failed to start the bot: {e}")
-        
