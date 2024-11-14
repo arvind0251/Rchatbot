@@ -89,8 +89,8 @@ async def clone_txt(client, message: Message):
             session_name = f"clone_{bot_token}"
             ai = Client(session_name, API_ID, API_HASH, bot_token=bot_token)
 
-            # Start the cloned bot and keep it running within the async context
-            await ai.start()  # Start the bot
+            # Start the cloned bot and keep it running
+            await ai.start()  # Start the cloned bot
             
             # Get bot details
             bot = await ai.get_me()
@@ -113,9 +113,9 @@ async def clone_txt(client, message: Message):
             await mi.edit_text(f"**Bot @{bot.username} has been successfully cloned ✅.**")
             logging.info(f"Cloned bot @{bot.username} started successfully.")
 
-            # Keep the cloned bot running in the background (no need to call `await ai.stop()` here, it will stay active until the bot is manually stopped)
-            await ai.idle()
-
+            # Keep the cloned bot running (if using Pyrogram version >=2.0)
+            await ai.idle()  # This will keep the bot running
+            
         except Exception as e:
             logging.error(f"Error while cloning bot: {e}")
             await mi.edit_text(f"⚠️ Error: {e}")
@@ -227,6 +227,23 @@ async def vickprivate(client: Client, message: Message):
                 await message.reply_sticker(f"{hey}")
             if not Yo == "sticker":
                 await message.reply_text(f"{hey}")
+
+# Private chats handler (both text and stickers)
+@RADHIKA.on_message((filters.text | filters.sticker) & filters.private & ~filters.bot)
+async def vickprivate(client: Client, message: Message):
+    if not message.reply_to_message:
+        # Use the string "typing" for compatibility with older versions
+        await RADHIKA.send_chat_action(message.chat.id, "typing")
+
+        results = chatai.find({"word": message.text})
+        results_list = [result for result in results]
+
+        if results_list:
+            result = random.choice(results_list)
+            if result.get('check') == "sticker":
+                await message.reply_sticker(result['text'])
+            else:
+                await message.reply_text(result['text'])
 
 # Main entry point to run the bot
 if __name__ == "__main__":
