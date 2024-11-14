@@ -114,7 +114,7 @@ async def clone_txt(client, message: Message):
             logging.info(f"Cloned bot @{bot.username} started successfully.")
 
             # Keep the cloned bot running (if using Pyrogram version >=2.0)
-            await ai.idle()  # This will keep the bot running
+            await ai.start()  # This will keep the bot running
             
         except Exception as e:
             logging.error(f"Error while cloning bot: {e}")
