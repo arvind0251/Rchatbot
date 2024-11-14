@@ -218,5 +218,4 @@ if __name__ == "__main__":
 
     # Start the bot asynchronously
     asyncio.get_event_loop().run_until_complete(anony_boot())
-    logging.info("Bot has been stopped.")
-    
+    LOGGER.info("Stopping nexichat Bot...")
