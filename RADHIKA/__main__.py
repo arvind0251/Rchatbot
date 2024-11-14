@@ -6,7 +6,7 @@ from flask import Flask
 import threading
 from pyrogram import idle
 from pyrogram.types import BotCommand
-from RADHIKA import LOGGER, RADHIKA
+from RADHIKA import LOGGER, nexichat
 from RADHIKA.plugins import ALL_MODULES
 from RADHIKA.plugins.Clone import restart_bots
 
