@@ -7,8 +7,8 @@ from pyrogram import idle
 from pyrogram.types import BotCommand
 from config import OWNER_ID
 from RADHIKA import LOGGER, RADHIKA
-from RADHIKA.modules import ALL_MODULES
-from RADHIKA.modules.Clone import restart_bots
+from RADHIKA.plugins import ALL_MODULES
+from RADHIKA.plugins.Clone import restart_bots
 
 async def anony_boot():
     try:
@@ -21,7 +21,7 @@ async def anony_boot():
         LOGGER.error(ex)
 
     for all_module in ALL_MODULES:
-        importlib.import_module("RADHIKA.modules." + all_module)
+        importlib.import_module("RADHIKA.plugins." + all_module)
         LOGGER.info(f"Successfully imported : {all_module}")
 
     # Set bot commands
