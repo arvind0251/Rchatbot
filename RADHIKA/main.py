@@ -98,7 +98,10 @@ async def clone_txt(client, message: Message):
                 "token": bot_token,
                 "username": bot.username,
             }
-            await clonebotdb.insert_one(details)
+
+            # Insert the details synchronously without using 'await'
+            clonebotdb.insert_one(details)  # No 'await' here
+
             await mi.edit_text(f"**Bot @{bot.username} has been successfully cloned ✅.**")
         except Exception as e:
             logging.exception("Error while cloning bot.")
@@ -203,4 +206,4 @@ if __name__ == "__main__":
         asyncio.get_event_loop().run_forever()  # Keep the event loop running
     except Exception as e:
         logging.error(f"Failed to start the bot: {e}")
-    
+        
