@@ -170,6 +170,7 @@ async def vickai(client: Client, message: Message):
         is_vick = vick.find_one({"chat_id": message.chat.id})
 
         if not is_vick:
+            # Send 'typing' action correctly to avoid the error
             await RADHIKA.send_chat_action(message.chat.id, "typing")
 
             results = chatai.find({"word": message.text})
@@ -186,6 +187,7 @@ async def vickai(client: Client, message: Message):
 @RADHIKA.on_message((filters.text | filters.sticker) & filters.private & ~filters.bot)
 async def vickprivate(client: Client, message: Message):
     if not message.reply_to_message:
+        # Send 'typing' action correctly to avoid the error
         await RADHIKA.send_chat_action(message.chat.id, "typing")
 
         results = chatai.find({"word": message.text})
@@ -206,4 +208,4 @@ if __name__ == "__main__":
         asyncio.get_event_loop().run_forever()  # Keep the event loop running
     except Exception as e:
         logging.error(f"Failed to start the bot: {e}")
-        
+
