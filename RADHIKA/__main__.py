@@ -6,10 +6,11 @@ from flask import Flask
 import threading
 from pyrogram import idle
 from pyrogram.types import BotCommand
-from config import OWNER_ID
 from RADHIKA import LOGGER, RADHIKA
 from RADHIKA.plugins import ALL_MODULES
 from RADHIKA.plugins.Clone import restart_bots
+
+OWNER_ID = "7400383704"
 
 async def anony_boot():
     try:
