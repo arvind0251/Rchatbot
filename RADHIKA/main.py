@@ -87,8 +87,8 @@ async def clone_txt(client, message: Message):
         try:
             # Initialize the cloned bot client
             ai = Client(bot_token, API_ID, API_HASH, bot_token=bot_token)
-            await ai.start()  # Start the bot
-
+            await ai.start()  # Start the cloned bot
+            
             # Get bot details
             bot = await ai.get_me()
             bot_id = bot.id
@@ -109,6 +109,10 @@ async def clone_txt(client, message: Message):
             # Respond to the user
             await mi.edit_text(f"**Bot @{bot.username} has been successfully cloned ✅.**")
             logging.info(f"Cloned bot @{bot.username} started successfully.")
+
+            # Instead of `await ai.run()`, use idle
+            await ai.idle()  # Keep the cloned bot running
+
         except Exception as e:
             logging.error(f"Error while cloning bot: {e}")
             await mi.edit_text(f"⚠️ Error: {e}")
