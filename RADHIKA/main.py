@@ -219,6 +219,27 @@ async def vickprivate(client: Client, message: Message):
         if K:
             await message.reply(random.choice(K))
 
+# Group chat handler (both text and stickers)
+@RADHIKA.on_message(
+    (
+        filters.text
+        | filters.sticker
+    )
+    & filters.group
+    & ~filters.bot,
+)
+async def vickgroup(client: Client, message: Message):
+    chatdb = MongoClient(MONGO_URL)
+    chatai = chatdb["Word"]["WordDb"]
+    if not message.reply_to_message:
+        await RADHIKA.send_chat_action(message.chat.id, "typing")
+        K = []  
+        is_chat = chatai.find({"word": message.text})                 
+        for x in is_chat:
+            K.append(x['text'])
+        if K:
+            await message.reply(random.choice(K))
+
 # Start the main bot
 async def main():
     await anony_boot()
@@ -226,4 +247,4 @@ async def main():
 # Running the event loop
 if __name__ == "__main__":
     asyncio.run(main())
-            
+    
