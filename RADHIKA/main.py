@@ -2,6 +2,7 @@ import logging
 import os
 import asyncio
 from pyrogram import Client, filters
+from  pyrogram.enums import ChatAction
 from pyrogram.types import BotCommand, Message, InlineKeyboardButton, InlineKeyboardMarkup
 from pymongo import MongoClient
 import random
@@ -179,25 +180,47 @@ async def delete_all_cloned_bots(client, message: Message):
         logging.exception(e)
 
 # Non-private chats handler (both text and stickers)
-@RADHIKA.on_message((filters.text | filters.sticker) & ~filters.private & ~filters.bot)
-async def vickai(client: Client, message: Message):
-    if not message.reply_to_message:
-        vick = db["VickDb"]["Vick"]
-        is_vick = vick.find_one({"chat_id": message.chat.id})
+@RADHIKA.on_message(
+    (
+        filters.text
+        | filters.sticker
+    )
+    & filters.private
+    & ~filters.bot,
+)
+async def vickprivate(client: Client, message: Message):
 
-        if not is_vick:
-            # Use the string "typing" for compatibility with older versions
-            await RADHIKA.send_chat_action(message.chat.id, "typing")
-
-            results = chatai.find({"word": message.text})
-            results_list = [result for result in results]
-
-            if results_list:
-                result = random.choice(results_list)
-                if result.get('check') == "sticker":
-                    await message.reply_sticker(result['text'])
-                else:
-                    await message.reply_text(result['text'])
+   chatdb = MongoClient(MONGO_URL)
+   chatai = chatdb["Word"]["WordDb"]
+   if not message.reply_to_message: 
+       await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
+       K = []  
+       is_chat = chatai.find({"word": message.text})                 
+       for x in is_chat:
+           K.append(x['text'])
+       hey = random.choice(K)
+       is_text = chatai.find_one({"text": hey})
+       Yo = is_text['check']
+       if Yo == "sticker":
+           await message.reply_sticker(f"{hey}")
+       if not Yo == "sticker":
+           await message.reply_text(f"{hey}")
+   if message.reply_to_message:            
+       getme = await RADHIKA.get_me()
+       bot_id = getme.id       
+       if message.reply_to_message.from_user.id == bot_id:                    
+           await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
+           K = []  
+           is_chat = chatai.find({"word": message.text})                 
+           for x in is_chat:
+               K.append(x['text'])
+           hey = random.choice(K)
+           is_text = chatai.find_one({"text": hey})
+           Yo = is_text['check']
+           if Yo == "sticker":
+               await message.reply_sticker(f"{hey}")
+           if not Yo == "sticker":
+               await message.reply_text(f"{hey}")
 
 # Private chats handler (both text and stickers)
 @RADHIKA.on_message((filters.text | filters.sticker) & filters.private & ~filters.bot)
