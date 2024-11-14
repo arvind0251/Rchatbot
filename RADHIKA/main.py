@@ -110,8 +110,8 @@ async def clone_txt(client, message: Message):
             await mi.edit_text(f"**Bot @{bot.username} has been successfully cloned ✅.**")
             logging.info(f"Cloned bot @{bot.username} started successfully.")
 
-            # Instead of `await ai.run()`, use idle
-            await ai.idle()  # Keep the cloned bot running
+            # Keep the cloned bot running by using run()
+            await ai.run()
 
         except Exception as e:
             logging.error(f"Error while cloning bot: {e}")
