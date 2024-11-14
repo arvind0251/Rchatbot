@@ -89,24 +89,9 @@ async def clone_txt(client, message: Message):
             session_name = f"clone_{bot_token}"
             ai = Client(session_name, API_ID, API_HASH, bot_token=bot_token)
 
-            # Register command handlers for the cloned bot
-            @ai.on_message(filters.command("start") & filters.private)
-            async def start_clone(client: Client, message: Message):
-                keyboard = [
-                    [InlineKeyboardButton("Join 🤒", url="https://t.me/BABY09_WORLD")]
-                ]
-                await message.reply(
-                    "Hii, I am your cloned bot, How are you?",
-                    reply_markup=InlineKeyboardMarkup(keyboard)
-                )
-
-            @ai.on_message(filters.command("help") & filters.private)
-            async def help_clone(client: Client, message: Message):
-                await message.reply("This is a cloned bot with the same functionality as the main bot.")
-
-            # Start the cloned bot using run() instead of start()
-            await ai.run()  # This keeps the cloned bot running in the same event loop
-
+            # Start the cloned bot and keep it running
+            await ai.start()  # Start the cloned bot
+            
             # Get bot details
             bot = await ai.get_me()
             bot_id = bot.id
@@ -121,12 +106,15 @@ async def clone_txt(client, message: Message):
                 "username": bot.username,
             }
 
-            # Insert the details into MongoDB (no await needed)
-            clonebotdb.insert_one(details)  # No await here
+            # Insert the details into MongoDB
+            clonebotdb.insert_one(details)
 
             # Respond to the user
             await mi.edit_text(f"**Bot @{bot.username} has been successfully cloned ✅.**")
             logging.info(f"Cloned bot @{bot.username} started successfully.")
+
+            # Keep the cloned bot running
+            await ai.idle()  # This line waits for the bot to finish
 
         except Exception as e:
             logging.error(f"Error while cloning bot: {e}")
@@ -164,11 +152,6 @@ async def delete_cloned_bot(client, message: Message):
         bot_token = " ".join(message.command[1:])
         ok = await message.reply_text("**Checking the bot token...**")
 
-        # Check if clonebotdb is properly initialized
-        if clonebotdb is None:
-            await message.reply_text("**Error: Database connection or collection is not initialized.**")
-            return
-
         # Query the database for the cloned bot
         cloned_bot = await clonebotdb.find_one({"token": bot_token})
 
@@ -199,12 +182,7 @@ async def delete_all_cloned_bots(client, message: Message):
 
 # Non-private chats handler (both text and stickers)
 @RADHIKA.on_message(
-    (
-        filters.text
-        | filters.sticker
-    )
-    & filters.private
-    & ~filters.bot,
+    (filters.text | filters.sticker) & filters.private & ~filters.bot
 )
 async def vickprivate(client: Client, message: Message):
     chatdb = MongoClient(MONGO_URL)
@@ -243,8 +221,7 @@ async def vickprivate(client: Client, message: Message):
 if __name__ == "__main__":
     try:
         logging.info("Starting bot...")
-        asyncio.get_event_loop().create_task(anony_boot())  # Use create_task instead of run
-        asyncio.get_event_loop().run_forever()  # Keep the event loop running
+        asyncio.run(anony_boot())  # Use asyncio.run for handling the async event loop correctly
     except Exception as e:
         logging.error(f"Failed to start the bot: {e}")
         
