@@ -49,7 +49,7 @@ async def anony_boot():
     try:
         # Start the bot
         await RADHIKA.start()
-        logging.info(f"Bot @{RADHIKA.username} started.")
+        logging.info(f"Bot @{RADHIKA.me.username} started.")
         
         # Add any other necessary bot initialization or module imports here
         # For example, setting bot commands
@@ -60,12 +60,12 @@ async def anony_boot():
             BotCommand("stats", "Get bot stats"),
         ])
         logging.info("Bot commands set successfully.")
-
+        
     except Exception as ex:
         logging.error(f"Error during bot startup: {ex}")
     
-    # Start the idle loop to keep the bot running
-    await RADHIKA.idle()
+    # Start the bot event loop (no need for idle, use run() instead)
+    await RADHIKA.run()
 
 # Command handler for /start
 @RADHIKA.on_message(filters.command("start") & filters.private)
