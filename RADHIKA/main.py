@@ -1,26 +1,18 @@
 import logging
 import os
 import asyncio
-import threading
-import random
-import time
-from datetime import datetime
-import requests
 from pyrogram import Client, filters
-from pyrogram.types import *
-from pyrogram.enums import ChatAction
+from pyrogram.types import BotCommand, Message
 from pymongo import MongoClient
-from flask import Flask
 
-# Set up logging for debugging
-logging.basicConfig(level=logging.DEBUG)
+# Set up logging for simple output (Only info level)
+logging.basicConfig(level=logging.INFO)
 
 # Environment variables (ensure these are set correctly)
 API_ID = os.environ.get("API_ID", "16457832")
 API_HASH = os.environ.get("API_HASH", "3030874d0befdb5d05597deacc3e83ab")
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "7383809543:AAE1JNivQ81ZMoP7aC_FRDpRKByjahmBDTI")
-MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://TEAMBABY01:UTTAMRATHORE09@cluster0.vmjl9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-OWNER_ID = 7400383704  # Hardcoded OWNER_ID
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "7383809543:AAGaHCQb8b9C7-cB1fU5tlm3vrUFa8nj_wM")
+MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://teamdaxx123:teamdaxx123@cluster0.ysbpgcp.mongodb.net/?retryWrites=true&w=majority")
 
 # MongoDB connection
 try:
@@ -31,12 +23,12 @@ except Exception as e:
     logging.error(f"MongoDB connection error: {e}")
     exit()
 
+# Initialize MongoDB collections
 db = client["Word"]
 chatai = db["WordDb"]
 clonebotdb = db["CloneBotDb"]
 
-BOT_NAME = os.environ.get("BOT_NAME", "🐰⃟⃞⍣Rᴀᴅʜɪᴋᴀ❥")
-
+# Initialize the bot client
 RADHIKA = Client(
     "chat-gpt",
     api_id=API_ID,
@@ -49,36 +41,33 @@ async def anony_boot():
     try:
         # Start the bot
         await RADHIKA.start()
-        logging.info(f"Bot @{RADHIKA.me.username} started.")
+        logging.info(f"Bot @{RADHIKA.me.username} started successfully.")
         
-        # Add any other necessary bot initialization or module imports here
-        # For example, setting bot commands
+        # Set bot commands (Simple version with just basic commands)
         await RADHIKA.set_bot_commands([
             BotCommand("start", "Start the bot"),
             BotCommand("help", "Get the help menu"),
-            BotCommand("clone", "Clone a bot"),
-            BotCommand("stats", "Get bot stats"),
         ])
         logging.info("Bot commands set successfully.")
         
     except Exception as ex:
         logging.error(f"Error during bot startup: {ex}")
-    
-    # Start the bot event loop (no need for idle, use run() instead)
-    await RADHIKA.run()
+        return
+
+    # Keep the bot running
+    await RADHIKA.idle()
 
 # Command handler for /start
 @RADHIKA.on_message(filters.command("start") & filters.private)
 async def start(client: Client, message: Message):
-    keyboard = [
-        [
-            InlineKeyboardButton("Join 🤒", url="https://t.me/BABY09_WORLD")
-        ]
-    ]
-    await message.reply(
-        "Hii, I am Radhika Baby, How are you?",
-        reply_markup=InlineKeyboardMarkup(keyboard)
-    )
+    # Send a simple reply for /start command
+    await message.reply("Hii, I am Radhika Baby, How are you?")
+
+# Command handler for /help
+@RADHIKA.on_message(filters.command("help") & filters.private)
+async def help(client: Client, message: Message):
+    # Send a simple help message
+    await message.reply("This is a bot that does X, Y, and Z.\nUse /start to begin!")
 
 # Clone Bot Logic: /clone command
 @RADHIKA.on_message(filters.command(["clone", "host", "deploy"]))
@@ -88,7 +77,7 @@ async def clone_txt(client, message: Message):
         mi = await message.reply_text("Please wait while I check the bot token.")
         
         try:
-            ai = Client(bot_token, API_ID, API_HASH, bot_token=bot_token, plugins=dict(root="nexichat/mplugin"))
+            ai = Client(bot_token, API_ID, API_HASH, bot_token=bot_token)
             await ai.start()
             bot = await ai.get_me()
             bot_id = bot.id
@@ -155,9 +144,13 @@ async def delete_cloned_bot(client, message: Message):
         logging.exception(e)
 
 # Delete all cloned bots: /delallclone command
-@RADHIKA.on_message(filters.command("delallclone") & filters.user(OWNER_ID))
+@RADHIKA.on_message(filters.command("delallclone"))
 async def delete_all_cloned_bots(client, message: Message):
     try:
+        if message.from_user.id != OWNER_ID:
+            await message.reply_text("**You don't have permission to delete all cloned bots.**")
+            return
+
         a = await message.reply_text("**Deleting all cloned bots...**")
         await clonebotdb.delete_many({})
         await a.edit_text("**All cloned bots have been deleted successfully ✅**")
@@ -173,7 +166,7 @@ async def vickai(client: Client, message: Message):
         is_vick = vick.find_one({"chat_id": message.chat.id})
 
         if not is_vick:
-            await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
+            await RADHIKA.send_chat_action(message.chat.id, "typing")
 
             results = chatai.find({"word": message.text})
             results_list = [result for result in results]
@@ -189,7 +182,7 @@ async def vickai(client: Client, message: Message):
 @RADHIKA.on_message((filters.text | filters.sticker) & filters.private & ~filters.bot)
 async def vickprivate(client: Client, message: Message):
     if not message.reply_to_message:
-        await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
+        await RADHIKA.send_chat_action(message.chat.id, "typing")
 
         results = chatai.find({"word": message.text})
         results_list = [result for result in results]
@@ -201,21 +194,10 @@ async def vickprivate(client: Client, message: Message):
             else:
                 await message.reply_text(result['text'])
 
-# Flask Server Code for Health Check
-app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return "Bot is running"
-
-def run_flask():
-    app.run(host="0.0.0.0", port=8000)
-
+# Main entry point to run the bot
 if __name__ == "__main__":
-    # Start Flask server in a new thread
-    flask_thread = threading.Thread(target=run_flask)
-    flask_thread.start()
-
-    # Start the bot asynchronously
-    asyncio.get_event_loop().run_until_complete(anony_boot())
-    LOGGER.info("Stopping nexichat Bot...")
+    try:
+        logging.info("Starting bot...")
+        asyncio.run(anony_boot())  # Run the bot asynchronously
+    except Exception as e:
+        logging.error(f"Failed to start the bot: {e}")
