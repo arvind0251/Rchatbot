@@ -121,8 +121,8 @@ async def clone_txt(client, message: Message):
                 "username": bot.username,
             }
 
-            # Insert the details into MongoDB
-            await clonebotdb.insert_one(details)
+            # Insert the details into MongoDB (no await needed)
+            clonebotdb.insert_one(details)  # No await here
 
             # Respond to the user
             await mi.edit_text(f"**Bot @{bot.username} has been successfully cloned ✅.**")
@@ -202,35 +202,18 @@ async def delete_all_cloned_bots(client, message: Message):
 
 # Private chats handler (both text and stickers)
 @RADHIKA.on_message((filters.text | filters.sticker) & filters.private & ~filters.bot)
-async def private_chat_handler(client: Client, message: Message):
-    await RADHIKA.send_chat_action(message.chat.id, "typing")
-    results = chatai.find({"word": message.text})
-    results_list = [result for result in results]
+async def vickprivate(client: Client, message: Message):
+    if not message.reply_to_message:
+        await RADHIKA.send_chat_action(message.chat.id, "typing")
+        results = chatai.find({"word": message.text})
+        results_list = [result for result in results]
 
-    if results_list:
-        result = random.choice(results_list)
-        if result.get('check') == "sticker":
-            await message.reply_sticker(result['text'])
-        else:
-            await message.reply(result['text'])
-    else:
-        await message.reply("Sorry, I don't have an answer for that.")
-
-# Group chats handler (both text and stickers)
-@RADHIKA.on_message((filters.text | filters.sticker) & filters.group)
-async def group_chat_handler(client: Client, message: Message):
-    await RADHIKA.send_chat_action(message.chat.id, "typing")
-    results = chatai.find({"word": message.text})
-    results_list = [result for result in results]
-
-    if results_list:
-        result = random.choice(results_list)
-        if result.get('check') == "sticker":
-            await message.reply_sticker(result['text'])
-        else:
-            await message.reply(result['text'])
-    else:
-        await message.reply("Sorry, I don't have an answer for that.")
+        if results_list:
+            result = random.choice(results_list)
+            if result.get('check') == "sticker":
+                await message.reply_sticker(result['text'])
+            else:
+                await message.reply_text(result['text'])
 
 # Main entry point to run the bot
 if __name__ == "__main__":
@@ -240,4 +223,4 @@ if __name__ == "__main__":
         asyncio.get_event_loop().run_forever()  # Keep the event loop running
     except Exception as e:
         logging.error(f"Failed to start the bot: {e}")
-            
+        
