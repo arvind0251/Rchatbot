@@ -89,45 +89,34 @@ async def clone_txt(client, message: Message):
             session_name = f"clone_{bot_token}"
             ai = Client(session_name, API_ID, API_HASH, bot_token=bot_token)
 
-            # Start the cloned bot
-            await ai.start()
+            # Start the cloned bot and keep it running within the async context
+            async with ai:
+                # Get bot details
+                bot = await ai.get_me()
+                bot_id = bot.id
+                user_id = message.from_user.id
 
-            # Get bot details
-            bot = await ai.get_me()
-            bot_id = bot.id
-            user_id = message.from_user.id
-            
-            details = {
-                "bot_id": bot.id,
-                "is_bot": True,
-                "user_id": user_id,
-                "name": bot.first_name,
-                "token": bot_token,
-                "username": bot.username,
-            }
+                details = {
+                    "bot_id": bot.id,
+                    "is_bot": True,
+                    "user_id": user_id,
+                    "name": bot.first_name,
+                    "token": bot_token,
+                    "username": bot.username,
+                }
 
-            # Insert the details into MongoDB (No need to 'await' insert_one as it's not awaitable)
-            clonebotdb.insert_one(details)  # Just call insert_one without await
+                # Insert the details into MongoDB (No need to 'await' insert_one as it's not awaitable)
+                clonebotdb.insert_one(details)  # Just call insert_one without await
 
-            # Respond to the user
-            await mi.edit_text(f"**Bot @{bot.username} has been successfully cloned ✅.**")
-            logging.info(f"Cloned bot @{bot.username} started successfully.")
-            
-            # Run the cloned bot in a separate asyncio task
-            asyncio.create_task(run_cloned_bot(ai))
+                # Respond to the user
+                await mi.edit_text(f"**Bot @{bot.username} has been successfully cloned ✅.**")
+                logging.info(f"Cloned bot @{bot.username} started successfully.")
 
         except Exception as e:
             logging.error(f"Error while cloning bot: {e}")
             await mi.edit_text(f"⚠️ Error: {e}")
     else:
         await message.reply_text("**Provide Bot Token after /clone Command from @Botfather.**")
-
-# Function to run the cloned bot continuously
-async def run_cloned_bot(ai: Client):
-    try:
-        await ai.idle()  # This ensures that the cloned bot keeps running
-    except Exception as e:
-        logging.error(f"Error while keeping cloned bot idle: {e}")
 
 # List cloned bots: /cloned command
 @RADHIKA.on_message(filters.command("cloned"))
@@ -234,6 +223,23 @@ async def vickprivate(client: Client, message: Message):
                 await message.reply_sticker(f"{hey}")
             if not Yo == "sticker":
                 await message.reply_text(f"{hey}")
+
+# Private chats handler (both text and stickers)
+@RADHIKA.on_message((filters.text | filters.sticker) & filters.private & ~filters.bot)
+async def vickprivate(client: Client, message: Message):
+    if not message.reply_to_message:
+        # Use the string "typing" for compatibility with older versions
+        await RADHIKA.send_chat_action(message.chat.id, "typing")
+
+        results = chatai.find({"word": message.text})
+        results_list = [result for result in results]
+
+        if results_list:
+            result = random.choice(results_list)
+            if result.get('check') == "sticker":
+                await message.reply_sticker(result['text'])
+            else:
+                await message.reply_text(result['text'])
 
 # Main entry point to run the bot
 if __name__ == "__main__":
