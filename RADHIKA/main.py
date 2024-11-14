@@ -16,7 +16,8 @@ API_ID = os.environ.get("API_ID", "16457832")
 API_HASH = os.environ.get("API_HASH", "3030874d0befdb5d05597deacc3e83ab")
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "7383809543:AAE1JNivQ81ZMoP7aC_FRDpRKByjahmBDTI")
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://TEAMBABY01:UTTAMRATHORE09@cluster0.vmjl9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-OWNER_ID = os.environ.get("OWNER_ID", "7400383704")
+OWNER_ID = 7400383704  # Hardcoded OWNER_ID
+
 # MongoDB connection
 client = MongoClient(MONGO_URL, connectTimeoutMS=30000, serverSelectionTimeoutMS=30000)
 db = client["Word"]
@@ -120,7 +121,7 @@ async def delete_cloned_bot(client, message: Message):
         logging.exception(e)
 
 # Delete all cloned bots: /delallclone command
-@RADHIKA.on_message(filters.command("delallclone") & filters.user(int(os.environ.get("OWNER_ID"))))
+@RADHIKA.on_message(filters.command("delallclone") & filters.user(OWNER_ID))
 async def delete_all_cloned_bots(client, message: Message):
     try:
         a = await message.reply_text("**Deleting all cloned bots...**")
@@ -204,4 +205,4 @@ if __name__ == "__main__":
 
     # Run the bot
     run_bot()
-                
+    
