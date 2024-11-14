@@ -104,9 +104,9 @@ async def clone_txt(client, message: Message):
             async def help_clone(client: Client, message: Message):
                 await message.reply("This is a cloned bot with the same functionality as the main bot.")
 
-            # Start the cloned bot and keep it running
+            # Start the cloned bot
             await ai.start()  # Start the cloned bot
-
+            
             # Get bot details
             bot = await ai.get_me()
             bot_id = bot.id
@@ -128,9 +128,9 @@ async def clone_txt(client, message: Message):
             await mi.edit_text(f"**Bot @{bot.username} has been successfully cloned ✅.**")
             logging.info(f"Cloned bot @{bot.username} started successfully.")
 
-            # Keep the cloned bot running
-            await ai.run()  # Use `run()` to keep the cloned bot active
-            
+            # Keep the cloned bot running using run() to prevent the "event loop already running" error
+            await ai.run()  # This will keep the cloned bot active
+
         except Exception as e:
             logging.error(f"Error while cloning bot: {e}")
             await mi.edit_text(f"⚠️ Error: {e}")
@@ -167,11 +167,6 @@ async def delete_cloned_bot(client, message: Message):
         bot_token = " ".join(message.command[1:])
         ok = await message.reply_text("**Checking the bot token...**")
 
-        # Check if clonebotdb is properly initialized
-        if clonebotdb is None:
-            await message.reply_text("**Error: Database connection or collection is not initialized.**")
-            return
-
         # Query the database for the cloned bot
         cloned_bot = await clonebotdb.find_one({"token": bot_token})
 
@@ -200,11 +195,55 @@ async def delete_all_cloned_bots(client, message: Message):
         await a.edit_text(f"**An error occurred while deleting all cloned bots.** {e}")
         logging.exception(e)
 
+# Non-private chats handler (both text and stickers)
+@RADHIKA.on_message(
+    (
+        filters.text
+        | filters.sticker
+    )
+    & filters.private
+    & ~filters.bot,
+)
+async def vickprivate(client: Client, message: Message):
+
+    chatdb = MongoClient(MONGO_URL)
+    chatai = chatdb["Word"]["WordDb"]
+    if not message.reply_to_message:
+        await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
+        K = []  
+        is_chat = chatai.find({"word": message.text})                 
+        for x in is_chat:
+            K.append(x['text'])
+        hey = random.choice(K)
+        is_text = chatai.find_one({"text": hey})
+        Yo = is_text['check']
+        if Yo == "sticker":
+            await message.reply_sticker(f"{hey}")
+        if not Yo == "sticker":
+            await message.reply_text(f"{hey}")
+    if message.reply_to_message:            
+        getme = await RADHIKA.get_me()
+        bot_id = getme.id       
+        if message.reply_to_message.from_user.id == bot_id:                    
+            await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
+            K = []  
+            is_chat = chatai.find({"word": message.text})                 
+            for x in is_chat:
+                K.append(x['text'])
+            hey = random.choice(K)
+            is_text = chatai.find_one({"text": hey})
+            Yo = is_text['check']
+            if Yo == "sticker":
+                await message.reply_sticker(f"{hey}")
+            if not Yo == "sticker":
+                await message.reply_text(f"{hey}")
+
 # Private chats handler (both text and stickers)
 @RADHIKA.on_message((filters.text | filters.sticker) & filters.private & ~filters.bot)
 async def vickprivate(client: Client, message: Message):
     if not message.reply_to_message:
-        await RADHIKA.send_chat_action(message.chat.id, "typing")
+        # Use the string "typing" for compatibility with older versions
+        await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
 
         results = chatai.find({"word": message.text})
         results_list = [result for result in results]
@@ -220,7 +259,7 @@ async def vickprivate(client: Client, message: Message):
 @RADHIKA.on_message((filters.text | filters.sticker) & filters.group & ~filters.bot)
 async def vickgroup(client: Client, message: Message):
     if not message.reply_to_message:
-        await RADHIKA.send_chat_action(message.chat.id, "typing")
+        await RADHIKA.send_chat_action(message.chat.id, ChatAction.TYPING)
 
         results = chatai.find({"word": message.text})
         results_list = [result for result in results]
