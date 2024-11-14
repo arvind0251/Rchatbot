@@ -30,7 +30,7 @@ db = client["Word"]
 chatai = db["WordDb"]
 clonebotdb = db["CloneBotDb"]
 
-# Initialize the bot client
+# Initialize the main bot client
 RADHIKA = Client(
     "chat-gpt",
     api_id=API_ID,
@@ -38,7 +38,7 @@ RADHIKA = Client(
     bot_token=BOT_TOKEN
 )
 
-# Define the anony_boot function
+# Define the anony_boot function to start the main bot
 async def anony_boot():
     try:
         # Start the bot
@@ -84,8 +84,12 @@ async def clone_txt(client, message: Message):
         mi = await message.reply_text("Please wait while I check the bot token.")
         
         try:
+            # Initialize the cloned bot client
             ai = Client(bot_token, API_ID, API_HASH, bot_token=bot_token)
-            await ai.start()
+            await ai.start()  # Start the bot
+            await ai.run()  # Keep the bot running after it starts
+
+            # Get bot details
             bot = await ai.get_me()
             bot_id = bot.id
             user_id = message.from_user.id
@@ -99,12 +103,14 @@ async def clone_txt(client, message: Message):
                 "username": bot.username,
             }
 
-            # Insert the details synchronously without using 'await'
-            clonebotdb.insert_one(details)  # No 'await' here
+            # Insert the details into MongoDB (with await to ensure completion)
+            await clonebotdb.insert_one(details)  # MongoDB insert with await
 
+            # Respond to the user
             await mi.edit_text(f"**Bot @{bot.username} has been successfully cloned ✅.**")
+            logging.info(f"Cloned bot @{bot.username} started successfully.")
         except Exception as e:
-            logging.exception("Error while cloning bot.")
+            logging.error(f"Error while cloning bot: {e}")
             await mi.edit_text(f"⚠️ Error: {e}")
     else:
         await message.reply_text("**Provide Bot Token after /clone Command from @Botfather.**")
@@ -208,3 +214,4 @@ if __name__ == "__main__":
         asyncio.get_event_loop().run_forever()  # Keep the event loop running
     except Exception as e:
         logging.error(f"Failed to start the bot: {e}")
+        
