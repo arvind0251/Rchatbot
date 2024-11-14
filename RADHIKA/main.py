@@ -177,45 +177,20 @@ async def vickprivate(client: Client, message: Message):
             else:
                 await message.reply_text(result['text'])
 
-# Flask Web Server for keeping the bot alive
 app = Flask(__name__)
 
-@app.route("/")
+@app.route('/')
 def home():
     return "Bot is running"
 
-# Function to run Flask server in a separate thread
 def run_flask():
     app.run(host="0.0.0.0", port=8000)
 
-# Keep-alive function that pings the server periodically
-def keep_alive():
-    while True:
-        try:
-            requests.get("https://radhika-0xf7.onrender.com")
-        except Exception as e:
-            logging.error(f"Ping error: {e}")
-        time.sleep(300)  # Send ping every 5 minutes
-
-# Run bot
-def run_bot():
-    try:
-        logging.info(f"{BOT_NAME} is starting...")
-        RADHIKA.run()
-    except Exception as e:
-        logging.error(f"Error starting the bot: {e}")
-
 if __name__ == "__main__":
-    # Flask server in a separate thread
-    # flask_thread = threading.Thread(target=run_flask)
-    # flask_thread.daemon = True
-    # flask_thread.start()
+    # Start Flask server in a new thread
+    flask_thread = threading.Thread(target=run_flask)
+    flask_thread.start()
 
-    # Keep-alive function in a separate thread
-    # keep_alive_thread = threading.Thread(target=keep_alive)
-    # keep_alive_thread.daemon = True
-    # keep_alive_thread.start()
-
-    # Run the bot
-    run_bot()
-    
+    # Start the bot asynchronously
+    asyncio.get_event_loop().run_until_complete(anony_boot())
+    LOGGER.info("Stopping nexichat Bot...")
