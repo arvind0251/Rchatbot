@@ -145,14 +145,19 @@ async def delete_cloned_bot(client, message: Message):
         bot_token = " ".join(message.command[1:])
         ok = await message.reply_text("**Checking the bot token...**")
 
+        # Query the database for the cloned bot
         cloned_bot = await clonebotdb.find_one({"token": bot_token})
-        if cloned_bot:
-            await clonebotdb.delete_one({"token": bot_token})
-            await ok.edit_text(
-                "**🤖 your cloned bot has been disconnected from my server ☠️**\n**Clone by :- /clone**"
-            )
-        else:
+
+        if cloned_bot is None:
+            # If no bot is found, return an error
             await message.reply_text("**⚠️ The provided bot token is not in the cloned list.**")
+            return
+
+        # If the bot is found, delete it
+        await clonebotdb.delete_one({"token": bot_token})
+        await ok.edit_text(
+            "**🤖 your cloned bot has been disconnected from my server ☠️**\n**Clone by :- /clone**"
+        )
     except Exception as e:
         await message.reply_text(f"**An error occurred while deleting the cloned bot:** {e}")
         logging.exception(e)
@@ -210,7 +215,8 @@ async def vickprivate(client: Client, message: Message):
 if __name__ == "__main__":
     try:
         logging.info("Starting bot...")
-        asyncio.get_event_loop().create_task(anony_boot())  # Use create_task instead of run
+        asyncio.get_event_loop().create_task(anon
+y_boot())  # Use create_task instead of run
         asyncio.get_event_loop().run_forever()  # Keep the event loop running
     except Exception as e:
         logging.error(f"Failed to start the bot: {e}")
