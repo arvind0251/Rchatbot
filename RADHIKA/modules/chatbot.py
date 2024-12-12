@@ -6,8 +6,8 @@ from pyrogram.enums import ChatAction
 from pyrogram.types import InlineKeyboardMarkup, Message
 
 from config import MONGO_URL
-from RAUSHAN import AMBOT
-from RAUSHAN.modules.helpers import CHATBOT_ON, is_admins
+from RADHIKA import AMBOT
+from RADHIKA.modules.helpers import CHATBOT_ON, is_admins
 
 
 @AMBOT.on_message(filters.command(["chatbot"]) & filters.group & ~filters.bot)
