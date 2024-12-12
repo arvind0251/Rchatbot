@@ -1,1 +1,1 @@
-worker: python3 RADHIKA/main.py
+worker: python3 RADHIKA/__main__.py
