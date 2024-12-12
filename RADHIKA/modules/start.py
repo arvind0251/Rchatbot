@@ -9,10 +9,10 @@ from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardMarkup, Message
 
 from config import EMOJIOS, IMG, STICKER
-from RAUSHAN import BOT_NAME, AMBOT, dev
-from RAUSHAN.database.chats import add_served_chat
-from RAUSHAN.database.users import add_served_user
-from RAUSHAN.modules.helpers import (
+from RADHIKA import BOT_NAME, AMBOT, dev
+from RADHIKA.database.chats import add_served_chat
+from RADHIKA.database.users import add_served_user
+from RADHIKA.modules.helpers import (
     CLOSE_BTN,
     DEV_OP,
     HELP_BTN,
