@@ -5,9 +5,9 @@
 from pyrogram.enums import ChatMemberStatus as CMS
 from pyrogram.types import CallbackQuery, InlineKeyboardMarkup
 
-from RAUSHAN import AMBOT
-from RAUSHAN.database import vick
-from RAUSHAN.modules.helpers import (
+from RADHIKA import AMBOT
+from RADHIKA.database import vick
+from RADHIKA.modules.helpers import (
     ABOUT_BTN,
     ABOUT_READ,
     ADMIN_READ,
