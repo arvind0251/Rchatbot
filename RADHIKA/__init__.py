@@ -9,7 +9,7 @@ from motor.motor_asyncio import AsyncIOMotorClient as MongoCli
 from pyrogram import Client
 
 import config
-from RAUSHAN.modules import all_modules
+from RADHIKA.modules import all_modules
 
 logging.basicConfig(
     format="[%(asctime)s - %(levelname)s] - %(name)s - %(message)s",
