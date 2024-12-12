@@ -1,6 +1,6 @@
 from flask import Flask
 import threading
-from RAUSHAN import LOGGER, AMBOT
+from RADHIKA import LOGGER, AMBOT
 
 app = Flask(__name__)
 
