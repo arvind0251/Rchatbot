@@ -11,14 +11,14 @@ import asyncio
 import time
 from datetime import datetime
 from pyrogram import enums
-API_ID = os.environ.get("API_ID", "16457832") 
-API_HASH = os.environ.get("API_HASH", "3030874d0befdb5d05597deacc3e83ab") 
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "7638229482:AAGLBTZ4MPrIG_6NZ7uvR5d-wVllARdBqlY") 
+API_ID = os.environ.get("API_ID", "26763512") 
+API_HASH = os.environ.get("API_HASH", "0ad55e48bcc66511e3ddf9f483940680") 
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "8019005182:AAH-aKRGV_Flx9aqX2Qppw50NjAYLNYTHNc") 
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://TEAMBABY01:UTTAMRATHORE09@cluster0.vmjl9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 BOT_USERNAME = os.environ.get("BOT_USERNAME","") 
-UPDATE_CHNL = os.environ.get("UPDATE_CHNL","BABY09_WORLD")
-OWNER_USERNAME = os.environ.get("OWNER_USERNAME","UTTAM470")
-SUPPORT_GRP = os.environ.get("SUPPORT_GRP","+OL6jdTL7JAJjYzVl")
+UPDATE_CHNL = os.environ.get("UPDATE_CHNL","RU_DRA_65")
+OWNER_USERNAME = os.environ.get("OWNER_USERNAME","its_frk_03")
+SUPPORT_GRP = os.environ.get("SUPPORT_GRP","RU_DRA_098")
 BOT_NAME = os.environ.get("BOT_NAME","RADHIKA")
 START_IMG = os.environ.get("START_IMG","")
 
