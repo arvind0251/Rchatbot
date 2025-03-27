@@ -13,11 +13,11 @@ from datetime import datetime
 from pyrogram import enums
 API_ID = os.environ.get("API_ID", "26763512") 
 API_HASH = os.environ.get("API_HASH", "0ad55e48bcc66511e3ddf9f483940680") 
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "8019005182:AAH-aKRGV_Flx9aqX2Qppw50NjAYLNYTHNc") 
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "7989587847:AAFfH_SFPGohhdMyXQ5pIaP-nt9axK2QfK4") 
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://TEAMBABY01:UTTAMRATHORE09@cluster0.vmjl9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 BOT_USERNAME = os.environ.get("BOT_USERNAME","") 
 UPDATE_CHNL = os.environ.get("UPDATE_CHNL","RU_DRA_65")
-OWNER_USERNAME = os.environ.get("OWNER_USERNAME","its_frk_03")
+OWNER_USERNAME = os.environ.get("OWNER_USERNAME","its_frk_1")
 SUPPORT_GRP = os.environ.get("SUPPORT_GRP","RU_DRA_098")
 BOT_NAME = os.environ.get("BOT_NAME","RADHIKA")
 START_IMG = os.environ.get("START_IMG","")
